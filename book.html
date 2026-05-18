@@ -22,6 +22,127 @@
             </ul>
         </nav>
     </header>
+
+    <main>
+
+        <!-- Page Header -->
+         <section class="page-header">
+            <h1>Book an <em>Appointment</em></h1>
+            <p>Fill in your details and we will confirm your slot</p>
+         </section>
+
+         <!-- Booking Form -->
+          <section class="booking-section">
+            <div class="booking-wrapper">
+
+                <!-- Left - Form -->
+                 <div class="booking-form-box">
+                    <h2>Your Details</h2>
+
+                    <!-- Step 1 - Personal Info -->
+                     <div class="form-group">
+                        <label for="client-name">Full Name</label>
+                        <input type="text" id="client-name" placeholder="e.g. Yvonne Waithira"/>
+                     </div>
+
+                     <div class="form-group">
+                        <label for="client-phone">Phine Number</label>
+                        <input type="tel" id="client-phone" placeholder="e.g. 0712 345 678"/>
+                     </div>
+
+                     <div class="form-group">
+                        <label for="client-email">Email Address <span class="optional">(optional)</span></label>
+                        <input type="email" id="client-email" placeholder="e.g. yvonne@email.com"/>
+                     </div>
+
+                     <!-- Step 2 - Service Selection -->
+                      <div class="form-group">
+                        <label for="service-category">Service Category</label>
+                        <select id="service-category" onchange="updateServices()">
+                            <option value="">Select a category</option>
+                            <option value="lashes">👁️ Lash Services</option>
+                            <option value="wigs">💜 Wig Services</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="service-type">Specific Service</label>
+                        <select id="service-type">
+                            <option value="">Select a service first</option>
+                        </select>
+                      </div>
+
+                      <!-- Step 3 - Date & Time -->
+                       <div class="form-group">
+                        <label for="appt-date">Preffered Date</label>
+                        <input type="date" id="appt-date"/>
+                       </div>
+
+                       <div class="form-group">
+                        <label for="appt-time">Preferred Time</label>
+                        <select id="appt-time">
+                            <option value="">Select a time slot</option>
+                            <option value="08:00">8:00 AM</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                        </select>
+                       </div>
+
+                       <!-- Step 4 - Notes -->
+                        <div class="form-group">
+                            <label for="appt-notes">Additional Notes <span class="optional">(optional)</span> </label>
+                            <textarea id="appt-notes" placeholder="Any allergies, preferences or special requests..."></textarea>
+                        </div>
+
+                        <button id="book-btn" class="btn-primary full-width">✨ Confirm Booking</button>
+
+                 </div>
+
+                 <!-- Right - Summary -->
+                  <div class="booking-summary">
+                    <h2>Booking Summary</h2>
+                    <div class="summary-item">
+                        <span class="summary-label">Name</span>
+                        <span class="summary-value" id="sum-name">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Phone</span>
+                        <span class="summary-value" id="sum-phone">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Service</span>
+                        <span class="summary-value">sum-service>-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Date</span>
+                        <span class="summary-value" id="sum-service">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Time</span>
+                        <span class="summary-value" id="sum-time">-</span>
+                    </div>
+                    <div class="summary-item total-row">
+                        <span class="summary-label">Price</span>
+                        <span class="summary-value" id="sum-price">-</span>
+                    </div>
+
+                    <div class="summary-note">
+                        <p>✦ We will confirm your booking via WhatsApp or call within 24 hours.</p>
+                        <p>✦ Please arrive 10 minutes before your appointment time.</p></p>
+                    </div>
+                  </div>
+
+            </div>
+          </section>
+
+    </main>
     
 </body>
 </html>
