@@ -1,0 +1,101 @@
+/* -- CSS VARIABLES -- */
+:root {
+    --purple: #7B2FBE;
+    --purple-light: #9B59D6;
+    --purple-dark: #5A1F8C;
+    --purple-pale: #F3EDFB;
+    --purple-ultra-pale: #FAF7FE;
+    --white: #FFFFFF;
+    --black: #1A1A1A;
+    --grey: #6b6b6b;
+    --grey-light: #E8E8E8;
+    --gold: #C9A84C;
+}
+
+/* -- Reset -- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Jost', sans-serif;
+    background-color: var(--white);
+    color: var(--black);
+    min-height: 100vh;
+}
+
+/* -- NavBar -- */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--grey-light);
+    box-shadow: 0 2px 20px rgba(123, 47, 190, 0.08);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--purple);
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.logo a:hover { color: var(--purple-dark); }
+
+.nav.links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+}
+
+.nav.links a {
+    text-decoration: none;
+    color: var(--grey);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+    position: relative;
+}
+
+.nav.links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--purple);
+    transition: width 0.3s ease;
+}
+
+.nav.links a:hover,
+.nav-links a.active {
+    color: var(--purple);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+/* Hamburger */
+.hamburger {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--purple);
+    font-size: 1.8rem;
+    cursor: pointer;
+}
