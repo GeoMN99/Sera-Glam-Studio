@@ -817,3 +817,78 @@ nav {
  
 .gallery-placeholder span { font-size: 2.5rem; }
 .gallery-placeholder p { font-size: 0.85rem; letter-spacing: 1px; }
+
+/* -- Contact Page --*/
+.contact-section {
+    padding: 60px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.contact.wrapper {
+    display: flex;
+    gap: 50px;
+    align-items: flex-start;
+}
+
+.contact-info {
+    flex: 1;
+}
+
+.contact-info h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 35px;
+}
+
+.contact-info h2 em {
+    color: var(--purple);
+    font-style: italic;
+}
+
+.contact-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.contact-icon {
+    font-size: 1.5rem;
+}
+
+.contact-item h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--purple-dark);
+    margin-bottom: 5px;
+}
+
+.contact-item p {
+    font-size: 0.9rem;
+    color: var(--grey);
+    line-height: 1.6;
+}
+
+.contact-form-box {
+    flex: 1.2;
+    background: var(--purple-ultra-pale);
+    border-radius: 4px;
+    padding: 40px;
+    border: 1px solid rgba(123, 47, 190, 0.15);
+}
+
+.contact-form-box h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--purple-dark);
+    margin-bottom: 30px;
+}
+
+.contact-form-box h2 em {
+    color: var(--purple);
+    font-style: italic;
+}
+
