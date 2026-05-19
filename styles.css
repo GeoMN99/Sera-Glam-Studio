@@ -264,3 +264,69 @@ nav {
     display: block;
 }
 .hero-badge p { margin: 5px 0; }
+
+/* -- Intro --*/
+.intro {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    padding: 80px 60px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.intro-text {
+    flex: 1;
+}
+
+.intro-text h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.intro-text h2 em {
+    color: var(--purple);
+    font-style: italic;
+}
+
+.intro-text p {
+    color: var(--grey);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.intro-cards {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.intro-card {
+    background: var(--purple-pale);
+    border-radius: 4px;
+    padding: 25px;
+    border-left: 3px solid var(--purple);
+}
+.card-emoji {
+    font-size: 1.8rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.intro-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--purple-dark);
+    margin-bottom: 8px;
+}
+
+.intro-card p {
+    font-size: 0.9rem;
+    color: var(--grey);
+    line-height: 1.6;
+}
