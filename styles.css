@@ -700,3 +700,54 @@ nav {
     margin-bottom: 8px;
 }
 
+/* -- Booking List -- */
+.booking-list-section {
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.booking-list-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 25px;
+}
+
+.booking-list-section h2 em {
+    color: var(--purple);
+    font-style: italic;
+}
+
+#booking-list {
+    list-style: none;
+    padding: 0;
+}
+
+#booking-list li {
+    background: var(--purple-ultra-pale);
+    border: 1px solid rgba(123, 47, 190, 0.15);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+#bookings-list li .booking-info { flex: 1;}
+#bookings-list li .booking-info strong { 
+    color: var(--purple-dark);
+    display: block;
+    margin-bottom: 4px;
+}
+#bookings-list li .booking-info span {
+    color: var(--grey);
+    font-size: 0.85rem;
+}
+
+#booking-list li .booking-price {
+    color: var(--purple);
+    font-weight: 600;
+}
