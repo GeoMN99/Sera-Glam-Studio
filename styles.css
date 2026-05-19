@@ -393,3 +393,34 @@ nav {
     line-height: 1.6;
 }
 
+/* -- CTA --*/
+.cta {
+    background: var(--purple);
+    padding: 80px 40px;
+    text-align: center;
+}
+
+.cta-content h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    color: var(--white);
+    margin-bottom: 15px;
+}
+
+.cta-content p {
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}
+
+.cta .btn-primary {
+    background: var(--white);
+    color: var(--purple);
+}
+
+.cta .btn-primary:hover {
+    background: var(--purple-pale);
+    color: var(--purple-dark);
+}
