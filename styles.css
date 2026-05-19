@@ -892,3 +892,32 @@ nav {
     font-style: italic;
 }
 
+/* -- Footer -- */
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    background: var(--black);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+}
+
+/* -- Success Message -- */
+.success-message {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--purple);
+    color: var(--white);
+    padding: 14px 30px;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    z-index: 999;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    box-shadow: 0 4px 20px rgba(123,47,190,0.3);
+}
+
+.success-message.fade-out { opacity: 0;}
