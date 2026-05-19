@@ -52,13 +52,13 @@ nav {
 
 .logo a:hover { color: var(--purple-dark); }
 
-.nav.links {
+.nav-links {
     list-style: none;
     display: flex;
     gap: 35px;
 }
 
-.nav.links a {
+.nav-links a {
     text-decoration: none;
     color: var(--grey);
     font-size: 0.85rem;
@@ -69,7 +69,7 @@ nav {
     position: relative;
 }
 
-.nav.links a::after {
+.nav-links a::after {
     content: '';
     position: absolute;
     bottom: -4px;
@@ -80,7 +80,7 @@ nav {
     transition: width 0.3s ease;
 }
 
-.nav.links a:hover,
+.nav-links a:hover,
 .nav-links a.active {
     color: var(--purple);
 }
@@ -239,7 +239,7 @@ nav {
     letter-spacing: 1px;
 }
 
-.hero.buttons {
+.hero-buttons {
     display: flex;
     gap: 15px;
     justify-content: center;
@@ -825,7 +825,7 @@ nav {
     margin: 0 auto;
 }
 
-.contact.wrapper {
+.contact-wrapper {
     display: flex;
     gap: 50px;
     align-items: flex-start;
