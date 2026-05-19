@@ -632,3 +632,71 @@ nav {
     resize: vertical;
 }
 
+/* -- Booking Summary -- */
+.booking-summary {
+    flex: 1;
+    background: var(--purple-pale);
+    border-radius: 4px;
+    padding: 35px 30px;
+    border: 1px solid rgba(123,47,190,0.15);
+    position: sticky;
+    top: 100px;
+}
+
+.booking-summary h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--purple-dark);
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(123,47,190,0.2);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(123,47,190,0.1);
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey);
+}
+
+.summary-value {
+    font-size: 0.9rem;
+    color: var(--black);
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+}
+
+.total-row .summary-label {
+    color: var(--purple-dark);
+    font-weight: 600;
+}
+
+.total-row .summary-value {
+    color: var(--purple);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.summary-note {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(123,47,190,0.2);
+}
+
+.summary-note p {
+    font-size: 0.8rem;
+    color: var(--grey);
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
