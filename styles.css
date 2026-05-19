@@ -424,3 +424,29 @@ nav {
     background: var(--purple-pale);
     color: var(--purple-dark);
 }
+
+/* -- Page Header --*/
+.page-header {
+    background: var(--purple-ultra-pale);
+    padding: 70px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--grey-light);
+}
+
+.page-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.page-header h1 em {
+    color: var(--purple);
+    font-style: italic;
+}
+
+.page-header p {
+    color: var(--grey);
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}
