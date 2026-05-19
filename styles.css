@@ -450,3 +450,107 @@ nav {
     font-size: 0.95rem;
     letter-spacing: 1px;
 }
+
+
+/* -- Services Page --*/
+.services-section {
+    padding: 60px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.services-section.alt {
+    background: var(--purple-ultra-pale);
+    max-width: 100%;
+}
+
+.services-section.alt .services-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--purple-dark);
+    margin-bottom: 35px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--grey-light);
+}
+
+.services-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.service-card {
+    background: var(--white);
+    border-radius: 4px;
+    padding: 30px 25px;
+    width: calc(33.333% - 14px);
+    min-height: 250px;
+    flex: 1;
+    border: 1px solid var(--grey-light);
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(123,47,190,0.1);
+}
+
+.service-card.featured {
+    border-color: var(--purple);
+    border-top: 3px solid var(--purple);
+}
+
+.badge-tag {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--purple);
+    color: var(--white);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+}
+
+.service-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.service-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--black);
+}
+
+.price {
+    font-weight: 600;
+    color: var(--purple);
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.service-card p {
+    font-size: 0.88rem;
+    color: var(--grey);
+    line-height: 1.6;
+    flex: 1;
+}
+
+.duration {
+    font-size: 0.8rem;
+    color: var(--purple-light);
+    letter-spacing: 1px;
+}
+
