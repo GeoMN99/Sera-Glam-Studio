@@ -142,3 +142,115 @@ function renderTimeslots(dateStr) {
         grid.appendChild(btn);
     });
 }
+
+// Update Service Dropdown
+function updateServices() {
+    const category = document.getElementById('service-category').value;
+    const serviceSelect = document.getElementById('service-type');
+    serviceSelect.innerHTML = '<option value="">Select a service</option>';
+
+    if (category && serviceData[category]) {
+        serviceData[category].forEach((service, i) => {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = service.name + ' — ' + service.price;
+            serviceSelect.appendChild(option);
+        });
+    }
+
+    updateSummary();
+}
+
+// Update Booking Summary
+function updateSummary() {
+    const name = document.getElementById('client-name').value.trim();
+    const phone = document.getElementById('client-phone').value.trim();
+    const category = document.getElementById('service-category').value;
+    const serviceIndex = document.getElementById('service-type').value;
+
+    document.getElementById('sum-name').textContent = name || '—';
+    document.getElementById('sum-phone').textContent = phone || '—';
+
+    if (category && serviceIndex !== '') {
+        const service =serviceData[category][serviceIndex];
+        document.getElementById('sum-service').textContent = service.name;
+        document.getElementById('sum-price').textContent = service.price;
+    } else {
+       document.getElementById('sum-service').textContent = '—';
+       document.getElementById('sum-price').textContent = '—'; 
+    }
+
+    document.getElementById('sum-date').textContent = selectedDate || '—';
+
+    if (selectedTime) {
+        const slot = allTimeSlots.find(s => s.value === selectedTime);
+        document.getElementById('sum-time').textContent = slot ? slot.label : '—';
+    } else {
+        document.getElementById('sum-time').textContent = '—';
+    }
+}
+
+// Show Success Message
+function showSuccess(message) {
+    const msg = document.createElement('div');
+    msg.clearList.add('success-message');
+    msg.textContent = message;
+    document.body.appendChild(msg);
+    setTimeout(function() { msg.classList.add('fade-out'); }, 2000);
+    setTimeout(function() { msg.remove(); }, 2500);
+}
+
+// Add Booking
+function addBooking() {
+    const name = document.getElementById('client-name').value.trim();
+    const phone = document.getElementById('client-phone').value.trim();
+    const email = document.getElementById('client-email').value.trim();
+    const category = document.getElementById('service-category').value;
+    const serviceIndex = document.getElementById('service-type').value;
+    const notes = document.getElementById('appt-notes').value.trim(); 
+    
+    if (!name || !phone || !category || serviceIndex === '' || !selectedDate || !selectedTime) {
+        alert('Please fill in all required fields and select a date and time slot.');
+        return;
+    }
+
+    const service = serviceData[category][serviceIndex];
+    const slot = allTimeSlots.find(s => s.value === selectedTime);
+
+    const booking = {
+        service: service.name,
+        price: service.price,
+        duration: service.duration,
+        date: selectedDate,
+        rawDate: selectedDate,
+        time: slot.label,
+        rawTime: selectedTime,
+        notes,
+        bookedOn: new Date().toLocaleDateString()
+    };
+
+    bookings.push(booking);
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+
+    renderBookings();
+    buildCalendar(currentMonth, currentYear);
+    showSuccess('✨ Booking confirmed! We will contact you shortly.');
+
+    //Reset Form
+    document.getElementById('client-name').value = '';
+    document.getElementById('client-phone').value = '';
+    document.getElementById('client-email').value = '';
+    document.getElementById('service-category').value = '';
+    document.getElementById('service-type').innerHTML = '<option value="">Select a service first</option>';
+    document.getElementById('appt-notes').value = '';
+    document.getElementById('appt-date').value = '';
+    document.getElementById('appt-time').value = '';
+
+    selectedDate = null;
+    selectedTime = null;
+    document.getElementById('selected-date-label').textContent = 'Select a date to see availabile slots';
+    document.getElementById('time-slots-container').style.display = 'none';
+
+    updateSummary();
+}
+
