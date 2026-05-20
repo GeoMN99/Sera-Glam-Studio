@@ -74,28 +74,47 @@
                         </select>
                       </div>
 
-                      <!-- Step 3 - Date & Time -->
+                      <!-- Step 3 - Date & Time Calender -->
                        <div class="form-group">
-                        <label for="appt-date">Preferred Date</label>
-                        <input type="date" id="appt-date"/>
-                       </div>
+                         <label>Preffered Date & Time</label>
 
-                       <div class="form-group">
-                        <label for="appt-time">Preferred Time</label>
-                        <select id="appt-time">
-                            <option value="">Select a time slot</option>
-                            <option value="08:00">8:00 AM</option>
-                            <option value="09:00">9:00 AM</option>
-                            <option value="10:00">10:00 AM</option>
-                            <option value="11:00">11:00 AM</option>
-                            <option value="12:00">12:00 PM</option>
-                            <option value="13:00">1:00 PM</option>
-                            <option value="14:00">2:00 PM</option>
-                            <option value="15:00">3:00 PM</option>
-                            <option value="16:00">4:00 PM</option>
-                            <option value="17:00">5:00 PM</option>
-                        </select>
-                       </div>
+                         <!-- Calendar Header -->
+                         <div class="calendar-container">
+                            <div class="calendar-header">
+                                <button class="cal-nav" id="prev-month">‹</button>
+                                <span class="calendar-month-year">May 2026</span>
+                                <button class="cal-nav" id="next-month">›</button>
+                            </div>
+
+                            <!-- Day Labels -->
+                             <div class="calendar-days-header">
+                                <span>Sun</span>
+                                <span>Mon</span>
+                                <span>Tue</span>
+                                <span>Wed</span>
+                                <span>Thu</span>
+                                <span>Fri</span>
+                                <span>Sat</span>
+                             </div>
+                            
+                            <!-- Calendar Grid -->
+                             <div class="calendar-grid" id="calendar-grid"></div>
+                             
+                            <!-- Selected Date Display -->
+                             <p class="selected-date-label" id="selected-date-label">Select a date to see available slots</p>
+                         </div>
+
+                         <!-- Time Slots -->
+                          <div class="time-slots-container" id="time-slots-container" style="display:none">
+                            <label>Available Time Slots</label>
+                            <div class="time-slots-grid" id="time-slots-grid"></div>
+                          </div>
+
+                          <!-- Hidden inputs to store selected date and time -->
+                           <input type="hidden" id="appt-date"/>
+                           <input type="hidden" id="appt-time"/>
+
+                        </div>
 
                        <!-- Step 4 - Notes -->
                         <div class="form-group">
