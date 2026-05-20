@@ -305,3 +305,29 @@ function renderBookings() {
         });
     });
 }
+
+//Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    buildCalendar(currentMonth, currentYear);
+
+    document.getElementById('prev-month').addEventListener('click', function() {
+        currentMonth--;
+        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+        buildCalendar(currentMonth, currentYear);
+    });
+
+    document.getElementById('next-month').addEventListener('click', function() {
+        currentMonth++;
+        if (currentMonth > 11) { currentMonth =0; currentYear++; }
+        buildCalendar(currentMonth, currentYear);
+    });
+
+    document.getElementById('book-btn').addEventListener('click', addBooking);
+    document.getElementById('clear-bookings-btn').addEventListener('click', clearAllBookings);
+    document.getElementById('client-name').addEventListener('input', updateSummary);
+    document.getElementById('client-phone').addEventListener('input', updateSummary);
+    document.getElementById('service-category').addEventListener('change', updateServices);
+    document.getElementById('service-type').addEventListener('change', updateSummary);
+ 
+    renderBookings();
+});
