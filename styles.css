@@ -1080,3 +1080,205 @@ body.dark-mode .contact-form-box {
     color: var(--white);
     border-color: var(--purple);
 }
+
+/* ===== CALENDAR ===== */
+.calendar-container {
+    border: 1px solid var(--grey-light);
+    border-radius: 4px;
+    padding: 20px;
+    background: var(--white);
+    margin-top: 8px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--purple-dark);
+    letter-spacing: 1px;
+}
+
+.cal-nav {
+    background: transparent;
+    border: 1px solid var(--grey-light);
+    color: var(--purple);
+    font-size: 1.4rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cal-nav:hover {
+    background: var(--purple);
+    color: var(--white);
+    border-color: var(--purple);
+}
+
+.calendar-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.calendar-days-header span {
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--grey);
+    padding: 5px 0;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    font-family: 'Jost', sans-serif;
+}
+
+.cal-day:hover:not(.past):not(.empty) {
+    background: var(--purple-pale);
+    border-color: var(--purple-light);
+    color: var(--purple);
+}
+
+.cal-day.today {
+    border-color: var(--purple-light);
+    color: var(--purple);
+    font-weight: 600;
+}
+
+.cal-day.selected {
+    background: var(--purple);
+    color: var(--white);
+    border-color: var(--purple);
+    font-weight: 600;
+}
+
+.cal-day.past {
+    color: var(--grey-light);
+    cursor: not-allowed;
+}
+
+.cal-day.empty {
+    cursor: default;
+}
+
+.cal-day.has-bookings {
+    background: var(--purple-ultra-pale);
+}
+
+.selected-date-label {
+    margin-top: 15px;
+    font-size: 0.82rem;
+    color: var(--grey);
+    letter-spacing: 1px;
+    text-align: center;
+    font-style: italic;
+}
+
+/* ===== TIME SLOTS ===== */
+.time-slots-container {
+    margin-top: 20px;
+}
+
+.time-slots-container label {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--black);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.time-slot {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid var(--grey-light);
+    border-radius: 2px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    transition: all 0.2s ease;
+    letter-spacing: 1px;
+    background: var(--white);
+    color: var(--black);
+}
+
+.time-slot:hover:not(.booked) {
+    background: var(--purple-pale);
+    border-color: var(--purple);
+    color: var(--purple);
+}
+
+.time-slot.selected-slot {
+    background: var(--purple);
+    color: var(--white);
+    border-color: var(--purple);
+    font-weight: 600;
+}
+
+.time-slot.booked {
+    background: var(--grey-light);
+    color: var(--grey);
+    cursor: not-allowed;
+    text-decoration: line-through;
+    font-size: 0.75rem;
+}
+
+/* Dark mode calendar */
+body.dark-mode .calendar-container {
+    background: #2A1A3E;
+    border-color: #3E2E5E;
+}
+
+body.dark-mode .cal-day {
+    color: #F0F0F0;
+}
+
+body.dark-mode .cal-day.past {
+    color: #3E2E5E;
+}
+
+body.dark-mode .time-slot {
+    background: #2A1A3E;
+    color: #F0F0F0;
+    border-color: #3E2E5E;
+}
+
+body.dark-mode .time-slot.booked {
+    background: #1A1A2E;
+    color: #3E2E5E;
+}
