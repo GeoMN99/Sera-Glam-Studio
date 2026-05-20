@@ -278,10 +278,33 @@ function addBooking() {
 
 // Delete Booking
 function deleteBooking(index) {
+    //Get the booking details before deleting
+    const cancelled = bookings[index];
+
+    //Confirm before cancelling
+    if (!confirm('Are you sure you want to cancel this booking?')) return;
+
+    //Remove from array and save
     bookings.splice(index, 1);
     localStorage.setItem('bookings', JSON.stringify(bookings));
     renderBookings();
     buildCalendar(currentMonth, currentYear);
+
+    //WhatsApp Cancellation Notice To Owner
+    const ownerPhone = '254113557894'; // Owner's number - change if needed
+
+        const message =
+        '❌ *Booking Cancelled — Sera Glam Studio* ❌' + '\n\n' +
+        '👤 *Client:* ' + cancelled.name + '\n' +
+        '📞 *Phone:* ' + cancelled.phone + '\n\n' +
+        '💅 *Service:* ' + cancelled.service + '\n' +
+        '📅 *Date:* ' + cancelled.date + '\n' +
+        '🕐 *Time:* ' + cancelled.time + '\n' +
+        '💰 *Price:* ' + cancelled.price + '\n\n' +
+        '✦ Cancelled on: ' + new Date().toLocaleDateString();
+
+    const whatsappURL = 'https://wa.me/' + ownerPhone + '?text=' + encodeURIComponent(message);
+    window.open(whatsappURL, '_blank');
 }
 
 // Clear all Bookings
