@@ -1,23 +1,33 @@
-// Dark mode toggle
+// ===== SERA GLAM STUDIO — DARK MODE TOGGLE =====
 
-//Check If user previously selected dark mode
-const saveTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    document.getElementById('theme-toggle').textContent ='☀️';
-}
+document.addEventListener('DOMContentLoaded', function() {
 
-//Add event listeners to toggle button
-document.getElementById('theme-toggle').addEventListener('click', function() {
-    // Toggle dark mode class on body
-    document.body.classList.toggle('dark-mode');
+    // Check if user previously selected dark mode and apply it
+    const savedTheme = localStorage.getItem('seraGlamTheme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
 
-    // Check which mode we are now in
-    const isDark = document.body.classList.contains('dark-mode');
+    // Get the toggle button
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
 
-    // Update the button emoji
-    this.textContent = isDark ? '☀️' : '🌙';
+    // Set correct emoji on page load
+    function updateToggleButton() {
+        const isDark = document.body.classList.contains('dark-mode');
+        btn.textContent = isDark ? '☀️' : '🌑';
+        btn.title = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    }
 
-    //Save the preference to local storage
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    // Run on load
+    updateToggleButton();
+
+    // Toggle dark mode on button click
+    btn.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        updateToggleButton();
+        localStorage.setItem('seraGlamTheme', isDark ? 'dark' : 'light');
+    });
+
 });
