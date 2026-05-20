@@ -309,11 +309,24 @@ function deleteBooking(index) {
 
 // Clear all Bookings
 function clearAllBookings() {
+    //Ask for password first
+    const password = prompt('Enter owner password to clear all bookings:');
+
+    //Check if password is correct
+    if (password === null) return // User clicked cancel
+
+    if (password !== 'sera2004') {
+        alert('❌ Incorrect password. Access denied.');
+        return;
+    }
+    // Password correct - confirm before clearing
     if (confirm('Are you sure you want to clear all bookings? This cannot be undone.')) {
+
         bookings = [];
         localStorage.removeItem('bookings');
         renderBookings();
         buildCalendar(currentMonth, currentYear);
+        alert('✅ All bookings cleared successfully.');
     }
 }
 
