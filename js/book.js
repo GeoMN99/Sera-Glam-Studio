@@ -254,3 +254,11 @@ function addBooking() {
     updateSummary();
 }
 
+// Delete Booking
+function deleteBooking(index) {
+    bookings.splice(index, 1);
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+    renderBookings();
+    buildCalendar(currentMonth, currentYear);
+}
+
