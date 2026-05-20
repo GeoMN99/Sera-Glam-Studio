@@ -91,7 +91,7 @@ function buildCalendar(month, year) {
                 selectedDate = dateStr;
                 selectedTime = null;
 
-                document.getElementById('appt-time').value = selectedDate;
+                document.getElementById('appt-date').value = selectedDate;
                 document.getElementById('appt-time').value = '';
 
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -108,7 +108,7 @@ function buildCalendar(month, year) {
 }
 
 // Render Time Slots
-function renderTimeslots(dateStr) {
+function renderTimeSlots(dateStr) {
     const container = document.getElementById('time-slots-container');
     const grid =document.getElementById('time-slots-grid');
     container.style.display = 'block';
@@ -122,7 +122,7 @@ function renderTimeslots(dateStr) {
         const btn = document.createElement('button');
         btn.classList.add('time-slot');
         btn.textContent = slot.label;
-        btn.setAttribute('date-time', slot.value);
+        btn.setAttribute('data-time', slot.value);
 
         if (bookedTimes.includes(slot.value)) {
             btn.classList.add('booked');
@@ -130,7 +130,7 @@ function renderTimeslots(dateStr) {
             btn.disabled = true;
         } else {
             btn.addEventListener('click', function() {
-                document.querySelector('.time-slot').forEach(s => s.classList.remove('selected-slot'));
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected-slot'));
 
                 this.classList.add('selected-slot');
                 selectedTime = slot.value;
@@ -193,7 +193,7 @@ function updateSummary() {
 // Show Success Message
 function showSuccess(message) {
     const msg = document.createElement('div');
-    msg.clearList.add('success-message');
+    msg.classList.add('success-message');
     msg.textContent = message;
     document.body.appendChild(msg);
     setTimeout(function() { msg.classList.add('fade-out'); }, 2000);
@@ -218,6 +218,9 @@ function addBooking() {
     const slot = allTimeSlots.find(s => s.value === selectedTime);
 
     const booking = {
+        name,          // ADD THIS LINE
+        phone,         // ADD THIS LINE
+        email,         // ADD THIS LINE
         service: service.name,
         price: service.price,
         duration: service.duration,
@@ -291,8 +294,11 @@ function renderBookings() {
         li.innerHTML =
             '<div class="booking-info">' +
                 '<strong>' + b.service + '</strong>' +
+                '<br/>' +
                 '<span>' + b.name + ' · ' + b.phone + '</span>' +
+                '<br/>' +
                 '<span>' + b.date + ' at ' + b.time + '</span>' +
+                '<br/>' +
                 '<span style="color:#9B59D6;">' + b.price + ' · ' + b.duration + '</span>' +
             '</div>' +
             '<button class="btn-danger" data-index="' + i + '" style="font-size:0.75rem; padding:8px 14px;">Cancel</button>';
