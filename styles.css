@@ -976,7 +976,25 @@ footer {
   .contact-form-box { padding: 25px; }
  
   .page-header { padding: 50px 20px; }
-}
+
+     /* Move theme toggle before hamburger on mobile using order */
+    .theme-toggle {
+        order: 2;
+    }
+
+    .hamburger {
+        order: 3;
+    }
+
+    .logo {
+        order: 1;
+    }
+
+    .nav-links {
+        order: 4;
+    }
+} 
+
  
 @media (max-width: 480px) {
   .gallery-grid { grid-template-columns: 1fr; }
