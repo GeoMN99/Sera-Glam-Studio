@@ -1,3 +1,144 @@
 // Load bookings from local storage or start empty
 let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
 
+// Calendar State
+let currentMonth =new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let selectedDate = null;
+let selectedTime = null;
+
+//All time slots
+const allTimeSlots = [
+    { value:'08:00', label: '8:00 AM' },
+    { value:'09:00', label: '9:00 AM' },
+    { value:'10:00', label: '10:00 AM' },
+    { value:'11:00', label: '11:00 AM' },
+    { value:'12:00', label: '12:00 PM' },
+    { value:'13:00', label: '1:00 PM' },
+    { value:'14:00', label: '2:00 PM' },
+    { value:'15:00', label: '3:00 PM' },
+    { value:'16:00', label: '4:00 PM' },
+    { value:'17:00', label: '5:00 PM' },
+];
+
+// Service Data
+const serviceData = {
+    lashes: [
+        { name: 'Classic Lashes', price: 'Ksh 1,500', duration: '90 mins' },
+        { name: 'Hybrid Lashes', price: 'Ksh 2,000', duration: '2 hours' },
+        { name: 'Volume Lashes', price: 'Ksh 2,500', duration: '2.5 hours' },
+        { name: 'Lash Removal', price: 'Ksh 500', duration: '30 mins' },
+        { name: 'Lash Infills', price: 'Ksh 1,000', duration: '60 mins' },
+    ],
+    wigs: [
+       { name: 'Wig Install', price: 'Ksh 1,500', duration: '60 mins' },
+       { name: 'Wig Install & Style', price: 'Ksh 2,500', duration: '2 hours' },
+       { name: 'Wig Styling Only', price: 'Ksh 1,000', duration: '60 mins' },
+       { name: 'Wig Maintenance', price: 'Ksh 800', duration: '45 mins' },
+    ]
+};
+
+// Build Calendar
+function buildCalendar(month, year) {
+    const grid = document.getElementById('calendar-grid');
+    const monthYearLabel = document.getElementById('calendar-month-year');
+    grid.innerHTML = '';
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    monthYearLabel.textContent = `${monthNames[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.classList.add('cal-day', 'empty');
+        grid.appendChild(empty);
+    }
+
+    // Day Cell
+    for (let day = 1; day <= totalDays; day++) {
+        const dayEl = document.createElement('div');
+        dayEl.classList.add('cal-day');
+        dayEl.textContent = day;
+
+        const thisDate = new Date(year, month, day);
+        thisDate.setHours(0, 0, 0, 0);
+
+        if (thisDate < today) {
+            dayEl.classList.add('past');
+        } else {
+            const dateStr = thisDate.toLocaleDateString('en-KE');
+            const hasBookings = bookings.some(b => b.rawDate === dateStr);
+            if (hasBookings) dayEl.classList.add('has-bookings');
+
+            if (thisDate.getTime() === today.getTime()) {
+                dayEl.classList.add('today');
+            }
+
+            if (selectedDate === dateStr) {
+                dayEl.classList.add('selected');
+            }
+
+            dayEl.addEventListener('click', function() {
+                document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+
+                this.classList.add('selected');
+
+                selectedDate = dateStr;
+                selectedTime = null;
+
+                document.getElementById('appt-time').value = selectedDate;
+                document.getElementById('appt-time').value = '';
+
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+                document.getElementById('selected-date-label').textContent = 'Selected' + thisDate.toLocaleDateString('en-KE', options);
+
+                renderTimeSlots(selectedDate);
+                updateSummary();
+            });
+        }
+
+        grid.appendChild(dayEl);
+    }
+}
+
+// Render Time Slots
+function renderTimeslots(dateStr) {
+    const container = document.getElementById('time-slots-container');
+    const grid =document.getElementById('time-slots-grid');
+    container.style.display = 'block';
+    grid.innerHTML = '';
+
+    const bookedTimes = bookings
+    .filter(b => b.rawDate === dateStr)
+    .map(b => b.rawTime);
+
+    allTimeSlots.forEach(slot => {
+        const btn = document.createElement('button');
+        btn.classList.add('time-slot');
+        btn.textContent = slot.label;
+        btn.setAttribute('date-time', slot.value);
+
+        if (bookedTimes.includes(slot.value)) {
+            btn.classList.add('booked');
+            btn.textContent = slot.label + ' ✗';
+            btn.disabled = true;
+        } else {
+            btn.addEventListener('click', function() {
+                document.querySelector('.time-slot').forEach(s => s.classList.remove('selected-slot'));
+
+                this.classList.add('selected-slot');
+                selectedTime = slot.value;
+                document.getElementById('appt-time').value = slot.value;
+                updateSummary();
+            });
+        }
+
+        grid.appendChild(btn);
+    });
+}
