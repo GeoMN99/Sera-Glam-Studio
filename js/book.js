@@ -239,6 +239,25 @@ function addBooking() {
     buildCalendar(currentMonth, currentYear);
     showSuccess('✨ Booking confirmed! We will contact you shortly.');
 
+    // WhatsApp Notification To Owner
+    const ownerPhone = '254113557894'; // Owner's number - change if needed
+
+    const message =
+    '🌸 *New Booking — Sera Glam Studio* 🌸' + '\n\n' +
+    '👤 *Client:* ' + name + '\n' +
+    '📞 *Phone:* ' + phone + '\n' +
+    '✉️ *Email:* ' + (email || 'Not provided') + '\n\n' +
+    '💅 *Service:* ' + service.name + '\n' +
+    '💰 *Price:* ' + service.price + '\n' +
+    '⏱ *Duration:* ' + service.duration + '\n\n' +
+    '📅 *Date:* ' + selectedDate + '\n' +
+    '🕐 *Time:* ' + slot.label + '\n\n' +
+    '📝 *Notes:* ' + (notes || 'None') + '\n\n' +
+    '✦ Booked on: ' + new Date().toLocaleDateString();
+
+    const whatsappURL = 'https://wa.me/' + ownerPhone + '?text=' + encodeURIComponent(message);
+    window.open(whatsappURL, '_blank');
+
     //Reset Form
     document.getElementById('client-name').value = '';
     document.getElementById('client-phone').value = '';
