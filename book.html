@@ -82,7 +82,7 @@
                          <div class="calendar-container">
                             <div class="calendar-header">
                                 <button class="cal-nav" id="prev-month">‹</button>
-                                <span class="calendar-month-year">May 2026</span>
+                                <span id="calendar-month-year">May 2026</span>
                                 <button class="cal-nav" id="next-month">›</button>
                             </div>
 
@@ -139,11 +139,11 @@
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Service</span>
-                        <span class="summary-value">sum-service>-</span>
+                        <span class="summary-value" id="sum-service">-</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Date</span>
-                        <span class="summary-value" id="sum-service">-</span>
+                        <span class="summary-value" id="sum-date">-</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Time</span>
@@ -166,7 +166,7 @@
           <!-- Booking List -->
            <section class="booking-list-section">
             <h2>Your <em>Bookings</em></h2>
-            <ul id="booking-list"></ul>
+            <ul id="bookings-list"></ul>
             <div id="clear-wrap" style="text-align:center; margin-top: 20px; display: none;">
                 <button id="clear-bookings-btn" class="btn-danger">🗑 Clear All Bookings</button>
             </div>
