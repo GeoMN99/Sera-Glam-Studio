@@ -262,3 +262,46 @@ function deleteBooking(index) {
     buildCalendar(currentMonth, currentYear);
 }
 
+// Clear all Bookings
+function clearAllBookings() {
+    if (confirm('Are you sure you want to clear all bookings? This cannot be undone.')) {
+        bookings = [];
+        localStorage.removeItem('bookings');
+        renderBookings();
+        buildCalendar(currentMonth, currentYear);
+    }
+}
+
+// Render Bookings List
+function renderBookings() {
+    const list = document.getElementById('bookings-list');
+    const clearWrap = document.getElementById('clear-wrap');
+    list.innerHTML = '';
+
+    if (bookings.length === 0) {
+        list.innerHTML = '<li style="color:#9B59D6; text-align:center; padding:30px; border:none; background:transparent;">No bookings yet. Book your first appointment above!</li>';
+        clearWrap.style.display = 'none';
+        return;
+    }
+
+    clearWrap.style.display = 'block';
+
+    bookings.forEach((b, i) => {
+        const li = document.createElement('li');
+        li.innerHTML =
+            '<div class="booking-info">' +
+                '<strong>' + b.service + '</strong>' +
+                '<span>' + b.name + ' · ' + b.phone + '</span>' +
+                '<span>' + b.date + ' at ' + b.time + '</span>' +
+                '<span style="color:#9B59D6;">' + b.price + ' · ' + b.duration + '</span>' +
+            '</div>' +
+            '<button class="btn-danger" data-index="' + i + '" style="font-size:0.75rem; padding:8px 14px;">Cancel</button>';
+        list.appendChild(li);
+    });
+
+    document.querySelectorAll('#bookings-list .btn-danger').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteBooking(parseInt(this.getAttribute('data-index')));
+        });
+    });
+}
