@@ -981,3 +981,84 @@ footer {
 @media (max-width: 480px) {
   .gallery-grid { grid-template-columns: 1fr; }
 }
+
+/* -- Dark Mode Variables -- */
+/* ===== DARK MODE VARIABLES ===== */
+body.dark-mode {
+    --purple: #9B59D6;
+    --purple-light: #B47EE5;
+    --purple-dark: #7B2FBE;
+    --purple-pale: #2A1A3E;
+    --purple-ultra-pale: #1A1028;
+    --white: #1A1A2E;
+    --black: #F0F0F0;
+    --grey: #AAAAAA;
+    --grey-light: #2E2E3E;
+    background-color: #0F0F1A;
+    color: #F0F0F0;
+}
+
+/* Dark mode navbar */
+body.dark-mode header {
+    background: #1A1A2E;
+    border-bottom: 1px solid #2E2E3E;
+}
+
+/* Dark mode nav dropdown on mobile */
+body.dark-mode .nav-links {
+    background: #1A1A2E;
+}
+
+/* Dark mode footer */
+body.dark-mode footer {
+    background: #0F0F1A;
+}
+
+/* Dark mode form inputs */
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background: #2A1A3E;
+    color: #F0F0F0;
+    border-color: #3E2E5E;
+}
+
+/* Dark mode booking form box */
+body.dark-mode .booking-form-box {
+    background: #1A1A2E;
+    border-color: #2E2E3E;
+}
+
+/* Dark mode service cards */
+body.dark-mode .service-card {
+    background: #1A1A2E;
+    border-color: #2E2E3E;
+}
+
+/* Dark mode why cards */
+body.dark-mode .why-card {
+    background: #1A1A2E;
+}
+
+/* Dark mode contact form */
+body.dark-mode .contact-form-box {
+    background: #2A1A3E;
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle {
+    background: transparent;
+    border: 1px solid var(--grey-light);
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--black);
+}
+
+.theme-toggle:hover {
+    background: var(--purple);
+    color: var(--white);
+    border-color: var(--purple);
+}
