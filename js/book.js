@@ -240,7 +240,7 @@ function addBooking() {
     showSuccess('✨ Booking confirmed! We will contact you shortly.');
 
     // WhatsApp Notification To Owner
-    const ownerPhone = '254113557894'; // Owner's number - change if needed
+    const ownerPhone = '254790549541'; // Owner's number - change if needed
 
     const message =
     '🌸 *New Booking — Sera Glam Studio* 🌸' + '\n\n' +
@@ -291,7 +291,7 @@ function deleteBooking(index) {
     buildCalendar(currentMonth, currentYear);
 
     //WhatsApp Cancellation Notice To Owner
-    const ownerPhone = '254113557894'; // Owner's number - change if needed
+    const ownerPhone = '254790549541'; // Owner's number - change if needed
 
         const message =
         '❌ *Booking Cancelled — Sera Glam Studio* ❌' + '\n\n' +
