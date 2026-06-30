@@ -379,13 +379,17 @@ async function clearAllBookings() {
 
     if (!confirm('Are you sure you want to clear ALL bookings? This cannot be undone.')) return;
 
-    for (const b of bookings) {
-        await fetch(`${API_URL}/${b.id}`, { method: 'DELETE' });
-    }
+    try {
+        const response = await fetch(API_URL, { method: 'DELETE' });
+        const result = await response.json();
 
-    await buildCalendar(currentMonth, currentYear);
-    await renderBookings();
-    alert('✅ All bookings cleared successfully.');
+        await buildCalendar(currentMonth, currentYear);
+        await renderBookings();
+        alert(`✅ ${result.count} bookings cleared successfully.`);
+    } catch (err) {
+        console.error(err);
+        alert('Could not reach the server.');
+    }
 }
 
 // ===== RENDER BOOKINGS LIST =====
