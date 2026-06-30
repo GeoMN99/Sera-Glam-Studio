@@ -1,15 +1,15 @@
-// ===== SERA GLAM STUDIO — BOOKING JS (BACKEND VERSION) =====
+// ===== SERA GLAM STUDIO — BOOKING JS (BACKEND VERSION, PUBLIC PAGE) =====
 
-const API_URL = 'https://sera-glam-backend.onrender.com/api/bookings'; 
+const API_URL = 'https://sera-glam-backend.onrender.com/api/bookings';
+const AVAILABILITY_URL = 'https://sera-glam-backend.onrender.com/api/availability';
 
-// Bookings now come from the server, not localStorage.
-// This array is just an in-memory cache, refreshed by fetchBookings().
+// Only ever holds { date, time } pairs now — no personal data reaches this page.
 let bookings = [];
 
 // ===== CALENDAR STATE =====
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
-let selectedDate = null;       // ISO format, e.g. "2026-05-22" — sent to backend
+let selectedDate = null;        // ISO format, e.g. "2026-05-22" — sent to backend
 let selectedDateDisplay = null; // human readable, e.g. "Friday, May 22, 2026" — shown to user
 let selectedTime = null;
 
@@ -45,8 +45,6 @@ const serviceData = {
 };
 
 // ===== HELPER: format a Date object as ISO "YYYY-MM-DD" =====
-// We use this instead of toLocaleDateString() because the backend
-// stores and compares dates in this exact format.
 function toISODate(date) {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -54,10 +52,10 @@ function toISODate(date) {
     return `${y}-${m}-${d}`;
 }
 
-// ===== FETCH BOOKINGS FROM SERVER =====
+// ===== FETCH AVAILABILITY FROM SERVER (no personal data) =====
 async function fetchBookings() {
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(AVAILABILITY_URL);
         bookings = await response.json();
     } catch (err) {
         console.error('Could not reach the server:', err);
@@ -68,7 +66,7 @@ async function fetchBookings() {
 
 // ===== BUILD CALENDAR =====
 async function buildCalendar(month, year) {
-    await fetchBookings(); // always work with fresh data from the server
+    await fetchBookings(); // always work with fresh availability data
 
     const grid = document.getElementById('calendar-grid');
     const monthYearLabel = document.getElementById('calendar-month-year');
@@ -83,14 +81,12 @@ async function buildCalendar(month, year) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Empty cells before the first day
     for (let i = 0; i < firstDay; i++) {
         const empty = document.createElement('div');
         empty.classList.add('cal-day', 'empty');
         grid.appendChild(empty);
     }
 
-    // Day cells
     for (let day = 1; day <= totalDays; day++) {
         const dayEl = document.createElement('div');
         dayEl.classList.add('cal-day');
@@ -98,7 +94,7 @@ async function buildCalendar(month, year) {
 
         const thisDate = new Date(year, month, day);
         thisDate.setHours(0, 0, 0, 0);
-        const dateStr = toISODate(thisDate); // ISO format, matches backend
+        const dateStr = toISODate(thisDate);
 
         if (thisDate < today) {
             dayEl.classList.add('past');
@@ -138,8 +134,6 @@ async function buildCalendar(month, year) {
 }
 
 // ===== RENDER TIME SLOTS =====
-// Uses the in-memory `bookings` array, which was just refreshed
-// by fetchBookings() inside buildCalendar() — no extra network call needed here.
 function renderTimeSlots(dateStr) {
     const container = document.getElementById('time-slots-container');
     const grid = document.getElementById('time-slots-grid');
@@ -255,8 +249,8 @@ async function addBooking() {
         service: service.name,
         price: service.price,
         duration: service.duration,
-        date: selectedDate,   // ISO format
-        time: selectedTime,   // raw "HH:MM"
+        date: selectedDate,
+        time: selectedTime,
         notes
     };
 
@@ -270,7 +264,7 @@ async function addBooking() {
 
         if (response.status === 409) {
             alert('Sorry, that time slot was just booked by someone else. Please pick another.');
-            await buildCalendar(currentMonth, currentYear); // refresh to show it as taken
+            await buildCalendar(currentMonth, currentYear);
             return;
         }
 
@@ -287,9 +281,7 @@ async function addBooking() {
         return;
     }
 
-    // Refresh calendar and bookings list from the server
     await buildCalendar(currentMonth, currentYear);
-    await renderBookings();
     showSuccess('✨ Booking confirmed! We will contact you shortly.');
 
     // ===== WHATSAPP NOTIFICATION TO OWNER =====
@@ -328,114 +320,24 @@ async function addBooking() {
     updateSummary();
 }
 
-// ===== DELETE (CANCEL) A BOOKING =====
+// ===== CANCEL A BOOKING (not currently wired to any UI on this public page — =====
+// ===== cancellation is now handled from the owner's admin page instead) =====
 async function deleteBooking(id) {
-    const target = bookings.find(b => b.id === id);
-    if (!target) return;
-
-    if (!confirm('Are you sure you want to cancel this booking?')) return;
-
     try {
         const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
         if (!response.ok) {
-            alert('Could not cancel the booking. It may have already been removed.');
+            console.error('Could not cancel booking', id);
             return;
         }
-    } catch (err) {
-        console.error(err);
-        alert('Could not reach the server.');
-        return;
-    }
-
-    await buildCalendar(currentMonth, currentYear);
-    await renderBookings();
-
-    // ===== WHATSAPP CANCELLATION NOTICE TO OWNER =====
-    const ownerPhone = '254790549541';
-    const message =
-        '❌ *Booking Cancelled — Sera Glam Studio* ❌' + '\n\n' +
-        '👤 *Client:* ' + target.name + '\n' +
-        '📞 *Phone:* ' + target.phone + '\n\n' +
-        '💅 *Service:* ' + target.service + '\n' +
-        '📅 *Date:* ' + target.date + '\n' +
-        '🕐 *Time:* ' + target.time + '\n' +
-        '💰 *Price:* ' + target.price;
-
-    const whatsappURL = 'https://wa.me/' + ownerPhone + '?text=' + encodeURIComponent(message);
-    window.open(whatsappURL, '_blank');
-}
-
-// ===== CLEAR ALL BOOKINGS (password protected) =====
-// Note: there's no bulk-delete endpoint on the backend yet, so this
-// cancels each booking one at a time using the same DELETE route.
-async function clearAllBookings() {
-    const password = prompt('Enter owner password to clear all bookings:');
-    if (password === null) return;
-
-    if (password !== 'sera2026') {
-        alert('❌ Incorrect password. Access denied.');
-        return;
-    }
-
-    if (!confirm('Are you sure you want to clear ALL bookings? This cannot be undone.')) return;
-
-    try {
-        const response = await fetch(API_URL, { method: 'DELETE' });
-        const result = await response.json();
-
         await buildCalendar(currentMonth, currentYear);
-        await renderBookings();
-        alert(`✅ ${result.count} bookings cleared successfully.`);
     } catch (err) {
         console.error(err);
-        alert('Could not reach the server.');
     }
-}
-
-// ===== RENDER BOOKINGS LIST =====
-async function renderBookings() {
-    const list = document.getElementById('bookings-list');
-    const clearWrap = document.getElementById('clear-wrap');
-    list.innerHTML = '';
-
-    if (bookings.length === 0) {
-        list.innerHTML = '<li style="color:#9B59D6; text-align:center; padding:30px; border:none; background:transparent;">No bookings yet. Book your first appointment above!</li>';
-        clearWrap.style.display = 'none';
-        return;
-    }
-
-    clearWrap.style.display = 'block';
-
-    bookings.forEach(b => {
-        const slot = allTimeSlots.find(s => s.value === b.time);
-        const timeLabel = slot ? slot.label : b.time;
-
-        const li = document.createElement('li');
-        li.innerHTML =
-            '<div class="booking-info">' +
-                '<strong>' + b.service + '</strong>' +
-                '<br/>' +
-                '<span>' + b.name + ' · ' + b.phone + '</span>' +
-                '<br/>' +
-                '<span>' + b.date + ' at ' + timeLabel + '</span>' +
-                '<br/>' +
-                '<span style="color:#9B59D6;">' + b.price + ' · ' + b.duration + '</span>' +
-            '</div>' +
-            '<button class="btn-danger" data-id="' + b.id + '" style="font-size:0.75rem; padding:8px 14px;">Cancel</button>';
-        list.appendChild(li);
-    });
-
-    document.querySelectorAll('#bookings-list .btn-danger').forEach(btn => {
-        btn.addEventListener('click', function () {
-            deleteBooking(parseInt(this.getAttribute('data-id')));
-        });
-    });
 }
 
 // ===== EVENT LISTENERS =====
 document.addEventListener('DOMContentLoaded', async function () {
     await buildCalendar(currentMonth, currentYear);
-    await renderBookings();
 
     document.getElementById('prev-month').addEventListener('click', async function () {
         currentMonth--;
@@ -450,7 +352,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     document.getElementById('book-btn').addEventListener('click', addBooking);
-    document.getElementById('clear-bookings-btn').addEventListener('click', clearAllBookings);
     document.getElementById('client-name').addEventListener('input', updateSummary);
     document.getElementById('client-phone').addEventListener('input', updateSummary);
     document.getElementById('service-category').addEventListener('change', updateServices);
