@@ -1,6 +1,6 @@
 // ===== SERA GLAM STUDIO — BOOKING JS (BACKEND VERSION) =====
 
-const API_URL = 'http://localhost:3000/api/bookings';
+const API_URL = 'http://sera-glam-backend.onrender.com/api/bookings'; 
 
 // Bookings now come from the server, not localStorage.
 // This array is just an in-memory cache, refreshed by fetchBookings().
