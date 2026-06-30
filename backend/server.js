@@ -31,6 +31,22 @@ app.get('/api/bookings', (req, res) => {
     res.json(bookings);
 });
 
+// ===== PUBLIC: AVAILABILITY ONLY (no personal data) =====
+// Used by the booking calendar — clients only need to know
+// which date+time slots are taken, never who booked them.
+app.get('/api/availability', (req, res) => {
+    const { date } = req.query;
+
+    let rows;
+    if (date) {
+        rows = db.prepare('SELECT date, time FROM bookings WHERE date = ?').all(date);
+    } else {
+        rows = db.prepare('SELECT date, time FROM bookings').all();
+    }
+
+    res.json(rows);
+});
+
 // ===== CREATE A NEW BOOKING =====
 app.post('/api/bookings', (req, res) => {
     const { name, phone, email, service, price, duration, date, time, notes } = req.body;
@@ -72,6 +88,12 @@ app.delete('/api/bookings/:id', (req, res) => {
 
     // Send back what was deleted, so the frontend can use it for the WhatsApp cancellation message
     res.json({ message: 'Booking cancelled.', cancelled: existing });
+});
+
+// ===== DELETE ALL BOOKINGS (bulk) =====
+app.delete('/api/bookings', (req, res) => {
+    const result = db.prepare('DELETE FROM bookings').run();
+    res.json({ message: 'All bookings cleared.', count: result.changes });
 });
 
 const PORT = 3000;
