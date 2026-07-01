@@ -71,7 +71,7 @@ Protected routes (owner password required via x-admin-password header):
 6. Update API_URL and AVAILABILITY_URL in js/book.js to point to localhost
 
 ### Live Site
-Frontend: https://geomn99.github.io/Sera-Glam-Studio
+Frontend: https://seraglamstudio.netlify.app
 Backend: https://sera-glam-backend.onrender.com
 
 ### Known Limitations

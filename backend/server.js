@@ -12,6 +12,33 @@ app.get('/', (req, res) => {
     res.send('Sera Glam Studio backend is running!');
 });
 
+// Converts a duration string to number of 1-hour slots to block
+// Examples:
+// "30 mins"  → 1
+// "45 mins"  → 1
+// "60 mins"  → 1
+// "90 mins"  → 2
+// "2 hours"  → 2
+// "2.5 hours"→ 3
+function durationToSlots(durationStr) {
+    if (!durationStr) return 1;
+
+    const str = durationStr.toLowerCase().trim();
+    let minutes = 0;
+
+    if (str.includes('hour')) {
+        // Extract the number before "hour"
+        const num = parseFloat(str);
+        minutes = num * 60;
+    } else if (str.includes('min')) {
+        // Extract the number before "min"
+        minutes = parseFloat(str);
+    }
+
+    // Each slot is 60 minutes — round up so we never double-book
+    return Math.ceil(minutes / 60);
+}
+
 // ===== GET ALL BOOKINGS (optionally filtered by date) =====
 // Full data — name, phone, email, etc. Used internally / for testing.
 app.get('/api/bookings', (req, res) => {
@@ -29,20 +56,49 @@ app.get('/api/bookings', (req, res) => {
     res.json(bookings);
 });
 
-// ===== PUBLIC: AVAILABILITY ONLY (no personal data) =====
-// Used by the booking calendar — clients only need to know
-// which date+time slots are taken, never who booked them.
+// ===== PUBLIC: AVAILABILITY ONLY (duration-aware) =====
 app.get('/api/availability', (req, res) => {
     const { date } = req.query;
 
-    let rows;
+    let bookedRows;
     if (date) {
-        rows = db.prepare('SELECT date, time FROM bookings WHERE date = ?').all(date);
+        bookedRows = db.prepare(
+            'SELECT date, time, duration FROM bookings WHERE date = ?'
+        ).all(date);
     } else {
-        rows = db.prepare('SELECT date, time FROM bookings').all();
+        bookedRows = db.prepare(
+            'SELECT date, time, duration FROM bookings'
+        ).all();
     }
 
-    res.json(rows);
+    // All time slot values in order
+    const allSlots = [
+        '08:00', '09:00', '10:00', '11:00', '12:00',
+        '13:00', '14:00', '15:00', '16:00', '17:00'
+    ];
+
+    // Build the full list of blocked slots, including duration overlap
+    const blockedSlots = [];
+
+    bookedRows.forEach(booking => {
+        const slotsNeeded = durationToSlots(booking.duration);
+        const startIndex = allSlots.indexOf(booking.time);
+
+        if (startIndex === -1) return; // unrecognised time, skip
+
+        // Block the start slot plus however many additional slots the duration needs
+        for (let i = 0; i < slotsNeeded; i++) {
+            const slotIndex = startIndex + i;
+            if (slotIndex < allSlots.length) {
+                blockedSlots.push({
+                    date: booking.date,
+                    time: allSlots[slotIndex]
+                });
+            }
+        }
+    });
+
+    res.json(blockedSlots);
 });
 
 // ===== CREATE A NEW BOOKING =====
