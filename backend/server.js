@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./db.js');  // our database connection
+const db = require('./db.js');
 
 const app = express();
 
@@ -13,17 +13,15 @@ app.get('/', (req, res) => {
 });
 
 // ===== GET ALL BOOKINGS (optionally filtered by date) =====
-// Example: GET /api/bookings?date=2026-05-22
+// Full data — name, phone, email, etc. Used internally / for testing.
 app.get('/api/bookings', (req, res) => {
     const { date } = req.query;
 
     let bookings;
     if (date) {
-        // Only bookings for that specific date
         const stmt = db.prepare('SELECT * FROM bookings WHERE date = ?');
         bookings = stmt.all(date);
     } else {
-        // All bookings
         const stmt = db.prepare('SELECT * FROM bookings ORDER BY date, time');
         bookings = stmt.all();
     }
@@ -51,12 +49,10 @@ app.get('/api/availability', (req, res) => {
 app.post('/api/bookings', (req, res) => {
     const { name, phone, email, service, price, duration, date, time, notes } = req.body;
 
-    // Basic validation
     if (!name || !phone || !service || !date || !time) {
         return res.status(400).json({ error: 'Missing required fields.' });
     }
 
-    // Check if this date + time is already booked
     const existing = db.prepare('SELECT * FROM bookings WHERE date = ? AND time = ?').get(date, time);
     if (existing) {
         return res.status(409).json({ error: 'This time slot is already booked.' });
@@ -70,7 +66,6 @@ app.post('/api/bookings', (req, res) => {
     `);
     const result = stmt.run(name, phone, email || null, service, price, duration, date, time, notes || null, bookedOn);
 
-    // Send back the newly created booking, including its new id
     const newBooking = db.prepare('SELECT * FROM bookings WHERE id = ?').get(result.lastInsertRowid);
     res.status(201).json(newBooking);
 });
@@ -85,18 +80,55 @@ app.delete('/api/bookings/:id', (req, res) => {
     }
 
     db.prepare('DELETE FROM bookings WHERE id = ?').run(id);
-
-    // Send back what was deleted, so the frontend can use it for the WhatsApp cancellation message
     res.json({ message: 'Booking cancelled.', cancelled: existing });
 });
 
-// ===== DELETE ALL BOOKINGS (bulk) =====
+// ===== DELETE ALL BOOKINGS (bulk, public version) =====
 app.delete('/api/bookings', (req, res) => {
     const result = db.prepare('DELETE FROM bookings').run();
     res.json({ message: 'All bookings cleared.', count: result.changes });
 });
 
-const PORT = 3000;
+// ===== ADMIN: SIMPLE PASSWORD CHECK MIDDLEWARE =====
+// Checks for a header called 'x-admin-password' on the request,
+// and compares it to the ADMIN_PASSWORD environment variable set on Render.
+function requireAdmin(req, res, next) {
+    const providedPassword = req.headers['x-admin-password'];
+
+    if (!providedPassword || providedPassword !== process.env.ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized.' });
+    }
+
+    next();
+}
+
+// ===== ADMIN: FULL BOOKING LIST (protected) =====
+app.get('/api/admin/bookings', requireAdmin, (req, res) => {
+    const rows = db.prepare('SELECT * FROM bookings ORDER BY date, time').all();
+    res.json(rows);
+});
+
+// ===== ADMIN: CANCEL A SPECIFIC BOOKING (protected) =====
+app.delete('/api/admin/bookings/:id', requireAdmin, (req, res) => {
+    const { id } = req.params;
+
+    const existing = db.prepare('SELECT * FROM bookings WHERE id = ?').get(id);
+    if (!existing) {
+        return res.status(404).json({ error: 'Booking not found.' });
+    }
+
+    db.prepare('DELETE FROM bookings WHERE id = ?').run(id);
+    res.json({ message: 'Booking cancelled.', cancelled: existing });
+});
+
+// ===== ADMIN: BULK CLEAR (protected) =====
+app.delete('/api/admin/bookings', requireAdmin, (req, res) => {
+    const result = db.prepare('DELETE FROM bookings').run();
+    res.json({ message: 'All bookings cleared.', count: result.changes });
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
