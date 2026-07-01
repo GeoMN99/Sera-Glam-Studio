@@ -92,3 +92,4 @@ Backend: https://sera-glam-backend.onrender.com
 - Add M-Pesa deposit integration for booking deposits
 - Add a cancellation token system so clients can cancel their own bookings safely
 - Add email confirmation to clients on booking
+
