@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin — Sera Glam Studio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>✨</text></svg>"/>
+    <link rel="stylesheet" href="styles.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+    <!--NAVBAR -->
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html">✨ Sera Glam Studio</a></div>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Dark Mode">🌙</button>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- Login Screen -->
+        <section class="admin-login" id="admin-login">
+            <div class="admin-login-box">
+                <h1>Owner <em>Login</em></h1>
+                <p>This page is for the studio owner only.</p>
+                <div class="form-group">
+                    <label for="admin-password-input">Password</label>
+                    <input type="password" id="admin-password-input" placeholder="Enter owner passowrd"/>
+                </div>
+                <button id="admin-login-btn" class="btn-primary full-width">Login</button>
+                <p class="admin-error" id="admin-error" style="display:none; color:#cc0000; margin-top: 15px; text-align: center;">
+                    ❌ Incorrect password. Try again.
+                </p>
+            </div>
+        </section>
+        
+        <!-- Admin Dashboard (hidden until logged in) -->
+        <section class="admin-dashboard" id="admin-dashboard" style="display:none">
+
+            <section class="page-header">
+                <h1>Admin <em>Dashboard</em></h1>
+                <p>All bookings - full details visible to owner only</p>
+            </section>
+
+            <section class="admin-content">
+                <div class="admin-toolbar">
+                    <p id="admin-booking-count" class="admin-count">Loading...</p>
+                    <button id="admin-refresh-btn" class="btn-outline">↻ Refresh</button>
+                    <button id="admin-clear-all-btn" class="btn-danger">🗑 Clear All Bookings</button>
+                    <button id="admin-logout-btn" class="btn-outline">Logout</button>
+                </div>
+
+                <ul id="admin-bookings-list"></ul>
+            </section>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>✨ Sera Glam Studio &copy; 2026 — Owner Dashboard</p>
+    </footer>
+
+    <script src="js/admin.js"></script>
+    <script src="js/theme.js"></script>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('nav-links');
+            if (nav) nav.classList.toggle('open');
+        }
+    </script>
+
+</body>
+</html>    
