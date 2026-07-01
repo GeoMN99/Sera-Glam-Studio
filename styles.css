@@ -1282,3 +1282,117 @@ body.dark-mode .time-slot.booked {
     background: #1A1A2E;
     color: #3E2E5E;
 }
+
+/* ===== ADMIN PAGE ===== */
+.admin-login {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: var(--purple-ultra-pale);
+}
+
+.admin-login-box {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-top: 3px solid var(--purple);
+    border-radius: 4px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.admin-login-box h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.admin-login-box h1 em {
+    color: var(--purple);
+    font-style: italic;
+}
+
+.admin-login-box p {
+    color: var(--grey);
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+.admin-login-box .form-group {
+    text-align: left;
+}
+
+.admin-dashboard {
+    padding-bottom: 60px;
+}
+
+.admin-content {
+    padding: 30px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--grey-light);
+}
+
+.admin-count {
+    font-size: 0.85rem;
+    color: var(--grey);
+    letter-spacing: 1px;
+    flex: 1;
+}
+
+#admin-bookings-list {
+    list-style: none;
+    padding: 0;
+}
+
+#admin-bookings-list li {
+    background: var(--purple-ultra-pale);
+    border: 1px solid rgba(123,47,190,0.15);
+    border-radius: 4px;
+    padding: 20px 25px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.admin-booking-info strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--purple-dark);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.admin-booking-info span {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--grey);
+    line-height: 1.7;
+}
+
+.admin-booking-info .admin-highlight {
+    color: var(--purple);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .admin-content { padding: 20px 15px; }
+    .admin-login-box { padding: 35px 20px; }
+    #admin-bookings-list li { flex-direction: column; }
+    .admin-toolbar { flex-direction: column; align-items: flex-start; }
+}
