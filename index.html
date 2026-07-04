@@ -28,22 +28,90 @@
 
      <!-- Hero Section -->
       <main>
-        <section class="hero">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <p class="hero-sub">Welcome to</p>
-                <h1>Sera Glam<br/><em>Studio</em></h1>
-                <p class="hero-desc">Lash Artist & Wig Stylist - crafting beauty, one look at a time.</p>
-                <div class="hero-buttons">
-                    <a href="book.html" class="btn-primary">Book Appointment</a>
-                    <a href="services.html" class="btn-outline">Our Services</a>
+        <section class="hero" id="hero">
+            
+            <!-- Background: floating sparkle particles -->
+            <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+            <!-- Cursor trail canvas (desktop only, populated by hero.js) -->
+            <canvas id="cursor-canvas" aria-hidden="true"></canvas>
+
+            <!-- Main content - eye-opeing clip-path reveal -->
+            <div class="hero-content-wrap" id="hero-content-wrap">
+
+                <!-- Lash SVG illustration -->
+                <div class="hero-lash" aria-hidden="true">
+                    <svg id="lash-svg"
+                         viewBox="0 0 600 175"
+                         xmlns="http://www.w3.org/2000/svg"
+                         preserveAspectRatio="xMidYMid meet">
+                        
+                        <!-- Curved base lash line - draws first -->
+                        <path id="lash-base"
+                              d="M 80 150 Q 300 133 520 150"
+                              fill="none"
+                              stroke="#7c3aed"
+                              stroke-width="2.2"
+                              stroke-linecap="round"/>
+                              
+                        <!-- 13 lash strokes - drawn center-out by hero.js -->
+                        <!-- Lash 0 (far left) -->
+                        <line class="lash-stroke" x1="91" y1="149" x2="87" y2="86" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>
+                        <!-- Lash 1 -->
+                        <line class="lash-stroke" x1="126" y1="147" x2="122" y2="74"  stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>
+                        <!-- Lash 2 -->
+                        <line class="lash-stroke" x1="161" y1="145" x2="157" y2="64"  stroke="#7c3aed" stroke-width="1.9" stroke-linecap="round"/>
+                        <!-- Lash 3 -->
+                        <line class="lash-stroke" x1="195" y1="143" x2="192" y2="56"  stroke="#7c3aed" stroke-width="1.9" stroke-linecap="round"/>
+                        <!-- Lash 4 -->
+                        <line class="lash-stroke" x1="230" y1="142" x2="228" y2="51"  stroke="#7c3aed" stroke-width="2.0" stroke-linecap="round"/>
+                        <!-- Lash 5 -->
+                        <line class="lash-stroke" x1="265" y1="141" x2="264" y2="47"  stroke="#7c3aed" stroke-width="2.0" stroke-linecap="round"/>
+                        <!-- Lash 6 — centre, draws first -->
+                        <line class="lash-stroke" x1="300" y1="141" x2="300" y2="46"  stroke="#8b5cf6" stroke-width="2.1" stroke-linecap="round"/>
+                        <!-- Lash 7 -->
+                        <line class="lash-stroke" x1="335" y1="141" x2="336" y2="47"  stroke="#7c3aed" stroke-width="2.0" stroke-linecap="round"/>
+                        <!-- Lash 8 -->
+                        <line class="lash-stroke" x1="370" y1="142" x2="372" y2="51"  stroke="#7c3aed" stroke-width="2.0" stroke-linecap="round"/>
+                        <!-- Lash 9 -->
+                        <line class="lash-stroke" x1="405" y1="143" x2="408" y2="56"  stroke="#7c3aed" stroke-width="1.9" stroke-linecap="round"/>
+                        <!-- Lash 10 -->
+                        <line class="lash-stroke" x1="439" y1="145" x2="443" y2="64"  stroke="#7c3aed" stroke-width="1.9" stroke-linecap="round"/>
+                        <!-- Lash 11 -->
+                        <line class="lash-stroke" x1="474" y1="147" x2="478" y2="74"  stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>
+                        <!-- Lash 12 (far right) -->
+                        <line class="lash-stroke" x1="509" y1="149" x2="513" y2="86"  stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>        
+                    </svg>
                 </div>
+                
+                
+                <!-- Central sparkle -->
+                <span class="hero-sparkle-center" aria-hidden="true">✦</span>
+ 
+                <!-- Brand name — shimmer applied at 2.5 s -->
+                <h1 class="hero-brand" id="hero-brand">SERA GLAM</h1>
+ 
+                <!-- Identity tagline — visible after eye opens -->
+                <p class="hero-tagline">LASH ARTIST &nbsp;·&nbsp; WIG STYLIST</p>
+ 
+                <!-- Divider — fades up at 2.9 s -->
+                <div class="hero-divider" id="hero-divider"></div>
+ 
+                <!-- Subtitle — fades up at 2.9 s -->
+                <p class="hero-subtitle" id="hero-subtitle">
+                    <em>Where every look tells your story.</em>
+                </p>
+ 
+                <!-- CTA — fades up at 2.9 s -->
+                <div class="hero-cta" id="hero-cta">
+                    <a href="book.html" class="hero-btn">BOOK NOW</a>
+                </div>
+            
             </div>
-            <div class="hero-badge">
-                <span>✦</span>
-                <p>Premium<br/>Beauty</p>
-                <span>✦</span>
-            </div>
+            
+            <!-- Sparkle burst — stars injected here by hero.js at 2 s -->
+            <div class="sparkle-burst" id="sparkle-burst" aria-hidden="true"></div>
+
         </section>
 
     <!-- INTRO -->
@@ -113,6 +181,8 @@
    </script>
 
    <script src="js/theme.js"></script>
+
+   <script src="js/hero.js"></script>
 
 </body>
 </html>

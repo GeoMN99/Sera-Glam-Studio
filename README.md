@@ -43,6 +43,8 @@ server-side password protection.
 - Hamburger navigation menu on mobile
 - Gallery filter by service category
 - Contact form with validation
+- Animated hero section with eye-opening clip-path reveal, self-drawing SVG lash illustration, canvas sparkle particles, shimmer brand name, sparkle burst and desktop cursor trail
+- prefers-reduced-motion respected — all animations disabled for users who prefer it
 
 ### Architecture
 Frontend (GitHub Pages) → calls → Backend API (Render) → reads/writes → SQLite database
@@ -85,6 +87,13 @@ Backend: https://sera-glam-backend.onrender.com
 - The public DELETE /api/bookings/:id route has no auth — anyone who
   knows a booking ID can cancel it. A future fix would require clients
   to provide a cancellation token sent to their phone/email at booking time
+  - Hero animation canvas elements are position: absolute inside the hero
+  section — if the hero section height changes significantly on resize,
+  the particle canvas rescales but existing particles may briefly appear
+  in the wrong position until the next animation frame
+- Cursor trail is skipped entirely on touch devices via
+  window.matchMedia('(hover: none)') — mobile users see the standard
+  cursor behaviour
 
 ### Future Plans
 - Replace SQLite with a cloud database for true cross-deploy persistence
@@ -92,4 +101,8 @@ Backend: https://sera-glam-backend.onrender.com
 - Add M-Pesa deposit integration for booking deposits
 - Add a cancellation token system so clients can cancel their own bookings safely
 - Add email confirmation to clients on booking
+- Add hero animation to other pages (services, about) with lighter
+  versions of the particle effect
+- Allow the lash SVG colours to respect the user's chosen theme
+  (light/dark mode toggle)
 
