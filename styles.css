@@ -1679,3 +1679,117 @@ body.dark-mode .time-slot.booked {
         flex      : none;
     }
 }
+
+/* =====================================================================
+   PAGE ANIMATION STYLES
+   Covers all inner pages: services, book, gallery, contact, admin
+   ===================================================================== */
+
+/* ── Page header override ── */
+/* The JS sets background and position:relative directly on .page-header
+   so the canvases position correctly. These rules handle the text layers. */
+
+.page-header {
+    cursor: none; /* replaced by custom cursor canvas on desktop */
+}
+
+@media (hover: none) {
+    .page-header { cursor: auto; }
+}
+
+/* ── SVG illustration wrapper ── */
+.ph-svg-wrap {
+    position : relative;
+    z-index  : 1;
+    margin   : 0 auto 18px;
+}
+
+/* ── Page title shimmer ── */
+/* Applied to h1 inside .page-header */
+.page-header h1.ph-title {
+    background : linear-gradient(
+        90deg,
+        #ffd700 0%, #ffd700 25%,
+        #f8f4ff 42%, #c4b5fd 50%, #f8f4ff 58%,
+        #ffd700 75%, #ffd700 100%
+    );
+    background-size            : 260% auto;
+    -webkit-background-clip    : text;
+    background-clip            : text;
+    -webkit-text-fill-color    : transparent;
+    animation                  : ph-shimmer 3.5s linear infinite;
+    animation-delay            : 0.8s;
+    /* keep existing font/size styles from the original .page-header h1 rule */
+}
+
+/* italic <em> inside h1 inherits the shimmer from the parent */
+.page-header h1.ph-title em {
+    -webkit-text-fill-color : transparent;
+    font-style              : italic;
+}
+
+@keyframes ph-shimmer {
+    0%   { background-position: 220% center; }
+    100% { background-position: -220% center; }
+}
+
+/* ── Subtitle fade-up ── */
+/* Initial state is set inline by JS; this rule handles the active state */
+.page-header p.ph-subtitle {
+    color : rgba(196, 181, 253, 0.85);
+}
+
+/* ── SVG stroke base state ── */
+/* Dashoffset is set by JS; opacity starts at 0 until JS sets it to 1
+   so there's no flash of a fully-drawn SVG before the animation fires */
+.ph-stroke {
+    opacity : 0;
+}
+
+/* Sparkle text nodes inside SVG that use ph-stroke class */
+text.ph-stroke {
+    stroke : none !important; /* text elements don't support stroke-dashoffset */
+}
+
+/* Fill elements (centre dots, highlighted cells) start hidden */
+.ph-fill {
+    opacity    : 0;
+    transition : opacity 0.45s ease;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    .page-header h1.ph-title {
+        animation                : none;
+        background               : none;
+        -webkit-text-fill-color  : var(--purple);
+        color                    : var(--purple);
+    }
+    .page-header h1.ph-title em {
+        -webkit-text-fill-color : var(--purple);
+        color                   : var(--purple);
+    }
+    .ph-stroke {
+        opacity          : 1 !important;
+        stroke-dashoffset: 0 !important;
+        transition       : none !important;
+    }
+    .ph-fill {
+        opacity    : 1 !important;
+        transition : none !important;
+    }
+    .page-header p.ph-subtitle {
+        opacity    : 1 !important;
+        transform  : none !important;
+        transition : none !important;
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .page-header { cursor: auto; }
+    .ph-svg-wrap svg {
+        width  : 130px !important;
+        height : auto  !important;
+    }
+}
