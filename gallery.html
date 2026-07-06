@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery — Sera Glam Studio</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>✨</text></svg>"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo"><a href="index.html">✨ Sera Glam Studio</a></div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="book.html">Book Now</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle Dark Mode">🌙</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="page-header">
+      <h1>Our <em>Gallery</em></h1>
+      <p>A glimpse of our work — lashes, wigs and everything glam</p>
+    </section>
+
+    <!-- Filter Buttons -->
+    <section class="gallery-filter">
+      <button class="filter-btn active" onclick="filterGallery('all')">All</button>
+      <button class="filter-btn" onclick="filterGallery('lashes')">👁️ Lashes</button>
+      <button class="filter-btn" onclick="filterGallery('wigs')">💜 Wigs</button>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-grid">
+
+      <!--
+        PICTURE SUGGESTION 1:
+        Add your lash photo here.
+        <img src="your-lash-photo-1.jpg" alt="Classic lash set" class="gallery-item" data-category="lashes"/>
+
+        PICTURE SUGGESTION 2:
+        Add your wig photo here.
+        <img src="your-wig-photo-1.jpg" alt="Wig install" class="gallery-item" data-category="wigs"/>
+
+        Follow the same pattern for all your photos.
+        Each image needs:
+        - src="your-image-filename.jpg"
+        - alt="description of the photo"
+        - class="gallery-item"
+        - data-category="lashes" OR data-category="wigs"
+      -->
+
+      <div class="gallery-placeholder" data-category="lashes">
+        <span>👁️</span>
+        <p>Add your lash photo here</p>
+      </div>
+
+      <div class="gallery-placeholder" data-category="wigs">
+        <span>💜</span>
+        <p>Add your wig photo here</p>
+      </div>
+
+      <div class="gallery-placeholder" data-category="lashes">
+        <span>👁️</span>
+        <p>Add your lash photo here</p>
+      </div>
+
+      <div class="gallery-placeholder" data-category="wigs">
+        <span>💜</span>
+        <p>Add your wig photo here</p>
+      </div>
+
+      <div class="gallery-placeholder" data-category="lashes">
+        <span>👁️</span>
+        <p>Add your lash photo here</p>
+      </div>
+
+      <div class="gallery-placeholder" data-category="wigs">
+        <span>💜</span>
+        <p>Add your wig photo here</p>
+      </div>
+
+    </section>
+
+    <section class="cta">
+      <div class="cta-content">
+        <h2>Love What You See?</h2>
+        <p>Book your appointment today and get your own glam look.</p>
+        <a href="book.html" class="btn-primary">Book Now</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>✨ Sera Glam Studio &copy; 2026 — Crafting Beauty, One Look at a Time.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById('nav-links');
+      nav.classList.toggle('open');
+    }
+
+    function filterGallery(category) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Show/hide gallery items
+      document.querySelectorAll('.gallery-item, .gallery-placeholder').forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+  <script src="js/theme.js"></script>
+
+  <script src="js/page-animation.js"></script>
+
+  
+
+</body>
+</html>
