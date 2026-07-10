@@ -1793,3 +1793,170 @@ text.ph-stroke {
         height : auto  !important;
     }
 }
+
+/* ── Lightbox overlay ── */
+#lightbox {
+    position        : fixed;
+    inset           : 0;
+    z-index         : 1000;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    opacity         : 0;
+    pointer-events  : none;
+    transition      : opacity 0.3s ease;
+}
+
+#lightbox.active {
+    opacity        : 1;
+    pointer-events : all;
+}
+
+/* Backdrop */
+.lb-backdrop {
+    position   : absolute;
+    inset      : 0;
+    background : rgba(8, 3, 18, 0.92);
+    backdrop-filter: blur(4px);
+}
+
+/* Content box */
+.lb-content {
+    position        : relative;
+    z-index         : 2;
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    max-width       : 90vw;
+    max-height      : 90vh;
+    gap             : 14px;
+}
+
+/* Image */
+.lb-img {
+    max-width     : 88vw;
+    max-height    : 78vh;
+    object-fit    : contain;
+    border-radius : 4px;
+    box-shadow    : 0 20px 60px rgba(0,0,0,0.6);
+    display       : block;
+}
+
+/* Caption */
+.lb-caption {
+    font-family    : 'Jost', sans-serif;
+    font-size      : 0.85rem;
+    letter-spacing : 1px;
+    color          : rgba(196, 181, 253, 0.85);
+    text-align     : center;
+}
+
+/* Counter */
+.lb-counter {
+    font-family : 'Jost', sans-serif;
+    font-size   : 0.75rem;
+    color       : rgba(248, 244, 255, 0.4);
+    text-align  : center;
+    margin      : 0;
+}
+
+/* Close button */
+.lb-close {
+    position    : absolute;
+    top         : 20px;
+    right       : 24px;
+    z-index     : 3;
+    background  : transparent;
+    border      : 1px solid rgba(196, 181, 253, 0.3);
+    color       : #c4b5fd;
+    font-size   : 1.6rem;
+    line-height : 1;
+    width       : 40px;
+    height      : 40px;
+    border-radius: 50%;
+    cursor      : pointer;
+    transition  : background 0.2s ease, border-color 0.2s ease;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+}
+
+.lb-close:hover {
+    background   : rgba(124, 58, 237, 0.3);
+    border-color : #c4b5fd;
+}
+
+/* Prev / Next arrows */
+.lb-prev,
+.lb-next {
+    position    : absolute;
+    top         : 50%;
+    transform   : translateY(-50%);
+    z-index     : 3;
+    background  : transparent;
+    border      : 1px solid rgba(196, 181, 253, 0.25);
+    color       : #c4b5fd;
+    font-size   : 2rem;
+    width       : 48px;
+    height      : 48px;
+    border-radius: 50%;
+    cursor      : pointer;
+    transition  : background 0.2s ease, border-color 0.2s ease;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+    line-height : 1;
+}
+
+.lb-prev { left  : 20px; }
+.lb-next { right : 20px; }
+
+.lb-prev:hover,
+.lb-next:hover {
+    background   : rgba(124, 58, 237, 0.3);
+    border-color : #c4b5fd;
+}
+
+@media (max-width: 768px) {
+    .lb-prev { left  : 8px; }
+    .lb-next { right : 8px; }
+    .lb-prev,
+    .lb-next { width: 38px; height: 38px; font-size: 1.5rem; }
+}
+
+/* ── Booking calendar loading state ── */
+.cal-loading {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    justify-content : center;
+    padding         : 30px 20px;
+    gap             : 14px;
+    grid-column     : 1 / -1; /* spans full calendar grid width */
+}
+
+.cal-spinner {
+    width         : 32px;
+    height        : 32px;
+    border        : 2px solid rgba(123, 47, 190, 0.2);
+    border-top    : 2px solid var(--purple);
+    border-radius : 50%;
+    animation     : cal-spin 0.9s linear infinite;
+}
+
+@keyframes cal-spin {
+    to { transform: rotate(360deg); }
+}
+
+.cal-loading p {
+    font-family    : 'Jost', sans-serif;
+    font-size      : 0.82rem;
+    color          : var(--grey);
+    letter-spacing : 1px;
+    text-align     : center;
+    margin         : 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-spinner { animation: none; border-color: var(--purple); }
+}

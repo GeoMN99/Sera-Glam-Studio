@@ -66,69 +66,85 @@ async function fetchBookings() {
 
 // ===== BUILD CALENDAR =====
 async function buildCalendar(month, year) {
-    await fetchBookings(); // always work with fresh availability data
-
-    const grid = document.getElementById('calendar-grid');
+    const grid          = document.getElementById('calendar-grid');
     const monthYearLabel = document.getElementById('calendar-month-year');
+ 
+    // Show loading state immediately
+    grid.innerHTML = `
+        <div class="cal-loading" style="grid-column:1/-1">
+            <div class="cal-spinner"></div>
+            <p id="cal-loading-msg">Loading availability…</p>
+        </div>
+    `;
+ 
+    // If the server takes more than 5 s (Render cold start),
+    // show a more informative message so the user doesn't leave
+    const slowTimer = setTimeout(() => {
+        const msg = document.getElementById('cal-loading-msg');
+        if (msg) msg.textContent = 'Still connecting… may take up to 60 s on first load';
+    }, 5000);
+ 
+    await fetchBookings();
+    clearTimeout(slowTimer);
+ 
+    // Now build the actual calendar
     grid.innerHTML = '';
-
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'];
+ 
+    const monthNames = [
+        'January','February','March','April','May','June',
+        'July','August','September','October','November','December'
+    ];
     monthYearLabel.textContent = `${monthNames[month]} ${year}`;
-
-    const firstDay = new Date(year, month, 1).getDay();
+ 
+    const firstDay  = new Date(year, month, 1).getDay();
     const totalDays = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
+    const today     = new Date();
     today.setHours(0, 0, 0, 0);
-
+ 
     for (let i = 0; i < firstDay; i++) {
         const empty = document.createElement('div');
         empty.classList.add('cal-day', 'empty');
         grid.appendChild(empty);
     }
-
+ 
     for (let day = 1; day <= totalDays; day++) {
-        const dayEl = document.createElement('div');
+        const dayEl   = document.createElement('div');
         dayEl.classList.add('cal-day');
         dayEl.textContent = day;
-
+ 
         const thisDate = new Date(year, month, day);
         thisDate.setHours(0, 0, 0, 0);
-        const dateStr = toISODate(thisDate);
-
+        const dateStr  = toISODate(thisDate);
+ 
         if (thisDate < today) {
             dayEl.classList.add('past');
         } else {
             const hasBookings = bookings.some(b => b.date === dateStr);
             if (hasBookings) dayEl.classList.add('has-bookings');
-
-            if (thisDate.getTime() === today.getTime()) {
-                dayEl.classList.add('today');
-            }
-
-            if (selectedDate === dateStr) {
-                dayEl.classList.add('selected');
-            }
-
+ 
+            if (thisDate.getTime() === today.getTime()) dayEl.classList.add('today');
+            if (selectedDate === dateStr) dayEl.classList.add('selected');
+ 
             dayEl.addEventListener('click', function () {
                 document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
                 this.classList.add('selected');
-
-                selectedDate = dateStr;
-                selectedTime = null;
-
+ 
+                selectedDate      = dateStr;
+                selectedTime      = null;
+ 
                 document.getElementById('appt-date').value = selectedDate;
                 document.getElementById('appt-time').value = '';
-
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+ 
+                const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
                 selectedDateDisplay = thisDate.toLocaleDateString('en-KE', options);
-                document.getElementById('selected-date-label').textContent = 'Selected: ' + selectedDateDisplay;
-
+                document.getElementById('selected-date-label').textContent =
+                    'Selected: ' + selectedDateDisplay;
+ 
                 renderTimeSlots(dateStr);
                 updateSummary();
             });
         }
-
+ 
         grid.appendChild(dayEl);
     }
 }
@@ -337,23 +353,51 @@ async function deleteBooking(id) {
 
 // ===== EVENT LISTENERS =====
 document.addEventListener('DOMContentLoaded', async function () {
+ 
     await buildCalendar(currentMonth, currentYear);
-
+    await renderBookings();
+ 
+    // ── Read URL params and pre-select service if present ──
+    const params   = new URLSearchParams(window.location.search);
+    const category = params.get('category');   // e.g. "lashes"
+    const service  = params.get('service');    // e.g. "1"
+ 
+    if (category && serviceData[category]) {
+        const catSelect = document.getElementById('service-category');
+        if (catSelect) {
+            catSelect.value = category;
+            updateServices(); // populate the service-type dropdown
+ 
+            if (service !== null) {
+                const svcSelect = document.getElementById('service-type');
+                // Small delay so updateServices() has painted the options
+                setTimeout(() => {
+                    if (svcSelect) {
+                        svcSelect.value = service;
+                        updateSummary();
+                    }
+                }, 50);
+            }
+        }
+    }
+ 
+    // ── Month navigation ──
     document.getElementById('prev-month').addEventListener('click', async function () {
         currentMonth--;
         if (currentMonth < 0) { currentMonth = 11; currentYear--; }
         await buildCalendar(currentMonth, currentYear);
     });
-
+ 
     document.getElementById('next-month').addEventListener('click', async function () {
         currentMonth++;
         if (currentMonth > 11) { currentMonth = 0; currentYear++; }
         await buildCalendar(currentMonth, currentYear);
     });
-
+ 
     document.getElementById('book-btn').addEventListener('click', addBooking);
+    document.getElementById('clear-bookings-btn').addEventListener('click', clearAllBookings);
     document.getElementById('client-name').addEventListener('input', updateSummary);
     document.getElementById('client-phone').addEventListener('input', updateSummary);
     document.getElementById('service-category').addEventListener('change', updateServices);
     document.getElementById('service-type').addEventListener('change', updateSummary);
-});
+})
