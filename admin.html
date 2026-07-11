@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!--NAVBAR -->
     <header>
         <nav>
             <div class="logo"><a href="index.html">✨ Sera Glam Studio</a></div>
@@ -20,39 +19,72 @@
 
     <main>
 
-        <!-- Login Screen -->
+        <!-- ===== LOGIN SCREEN ===== -->
         <section class="admin-login" id="admin-login">
             <div class="admin-login-box">
                 <h1>Owner <em>Login</em></h1>
                 <p>This page is for the studio owner only.</p>
                 <div class="form-group">
                     <label for="admin-password-input">Password</label>
-                    <input type="password" id="admin-password-input" placeholder="Enter owner passowrd"/>
+                    <input type="password" id="admin-password-input" placeholder="Enter owner password"/>
                 </div>
                 <button id="admin-login-btn" class="btn-primary full-width">Login</button>
-                <p class="admin-error" id="admin-error" style="display:none; color:#cc0000; margin-top: 15px; text-align: center;">
+                <p class="admin-error" id="admin-error"
+                   style="display:none;color:#cc0000;margin-top:15px;text-align:center;">
                     ❌ Incorrect password. Try again.
                 </p>
             </div>
         </section>
-        
-        <!-- Admin Dashboard (hidden until logged in) -->
-        <section class="admin-dashboard" id="admin-dashboard" style="display:none">
+
+        <!-- ===== ADMIN DASHBOARD ===== -->
+        <section class="admin-dashboard" id="admin-dashboard" style="display:none;">
 
             <section class="page-header">
                 <h1>Admin <em>Dashboard</em></h1>
-                <p>All bookings - full details visible to owner only</p>
+                <p>All bookings — full details visible to owner only</p>
             </section>
 
             <section class="admin-content">
+
+                <!-- Toolbar -->
                 <div class="admin-toolbar">
-                    <p id="admin-booking-count" class="admin-count">Loading...</p>
-                    <button id="admin-refresh-btn" class="btn-outline">↻ Refresh</button>
-                    <button id="admin-clear-all-btn" class="btn-danger">🗑 Clear All Bookings</button>
-                    <button id="admin-logout-btn" class="btn-outline">Logout</button>
+                    <p id="admin-booking-count" class="admin-count">Loading…</p>
+                    <button id="admin-refresh-btn"    class="btn-outline">↻ Refresh</button>
+                    <button id="admin-change-pw-btn"  class="btn-outline">🔑 Change Password</button>
+                    <button id="admin-clear-all-btn"  class="btn-danger">🗑 Clear All</button>
+                    <button id="admin-logout-btn"     class="btn-outline">Logout</button>
                 </div>
 
+                <!-- Password change form (hidden by default) -->
+                <div id="pw-change-section" class="pw-change-box" style="display:none;">
+                    <h3>Change Password</h3>
+
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" placeholder="Your current password"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" placeholder="At least 6 characters"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" placeholder="Repeat new password"/>
+                    </div>
+
+                    <p id="pw-feedback" style="font-size:0.85rem;margin:8px 0 14px;min-height:20px;"></p>
+
+                    <div style="display:flex;gap:12px;">
+                        <button id="pw-submit-btn" class="btn-primary">Update Password</button>
+                        <button id="pw-cancel-btn" class="btn-outline">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Bookings list -->
                 <ul id="admin-bookings-list"></ul>
+
             </section>
 
         </section>
@@ -65,15 +97,7 @@
 
     <script src="js/admin.js"></script>
     <script src="js/theme.js"></script>
-
-    <script>
-        function toggleMenu() {
-            const nav = document.getElementById('nav-links');
-            if (nav) nav.classList.toggle('open');
-        }
-    </script>
-
-    <script src="js/page-animation.js"></script>
+    <script src="js/page-animations.js"></script>
 
 </body>
-</html>    
+</html>

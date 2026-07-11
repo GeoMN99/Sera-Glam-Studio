@@ -1960,3 +1960,34 @@ text.ph-stroke {
 @media (prefers-reduced-motion: reduce) {
     .cal-spinner { animation: none; border-color: var(--purple); }
 }
+
+/* =====================================================================
+   PASSWORD CHANGE BOX
+   ===================================================================== */
+
+.pw-change-box {
+    background    : var(--purple-ultra-pale);
+    border        : 1px solid rgba(123, 47, 190, 0.2);
+    border-radius : 4px;
+    padding       : 28px 30px;
+    margin-bottom : 30px;
+    max-width     : 480px;
+}
+
+.pw-change-box h3 {
+    font-family   : 'Cormorant Garamond', serif;
+    font-size     : 1.4rem;
+    font-weight   : 400;
+    color         : var(--purple-dark);
+    margin-bottom : 20px;
+}
+
+/* Dark mode */
+body.dark-mode .pw-change-box {
+    background   : #2A1A3E;
+    border-color : #3E2E5E;
+}
+
+body.dark-mode .pw-change-box h3 {
+    color : var(--purple-light);
+}
