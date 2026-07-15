@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cancel Booking — Sera Glam Studio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>✨</text></svg>"/>
+    <link rel="stylesheet" href="styles.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html">✨ Sera Glam Studio</a></div>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Dark Mode">🌙</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <h1>Cancel <em>Booking</em></h1>
+            <p>Review your booking details before cancelling</p>
+        </section>
+
+        <section class="cancel-section">
+
+            <div id="cancel-loading" class="cancel-box" style="text-align:center;">
+                <div class="cal-spinner" style="margin:0 auto 16px;"></div>
+                <p style="color:var(--grey);">Looking up your booking...</p>
+            </div>
+
+            <div id="cancel-found" class="cancel-box" style="display:none;">
+                <h2>Your Booking</h2>
+                <div class="summary-item">
+                    <span class="summary-label">Name</span>
+                    <span class="summary-value" id="c-name">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Service</span>
+                    <span class="summary-value" id="c-service">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Date</span>
+                    <span class="summary-value" id="c-date">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Time</span>
+                    <span class="summary-value" id="c-time">-</span>
+                </div>
+                <div class="summary-item total-row">
+                    <span class="summary-label">Price</span>
+                    <span class="summary-value" id="c-price">-</span>
+                </div>
+                <p class="cancel-warning">
+                    This action cannot be undone. The studio owner will be notified.
+                </p>
+                <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;">
+                    <button id="confirm-cancel-btn" class="btn-danger">Cancel My Booking</button>
+                    <a href="index.html" class="btn-outline">Keep My Booking</a>
+                </div>
+            </div>
+
+            <div id="cancel-success" class="cancel-box" style="display:none;text-align:center;">
+                <p style="font-size:2.5rem;margin-bottom:16px;">✅</p>
+                <h2 style="margin-bottom:10px;">Booking Cancelled</h2>
+                <p style="color:var(--grey);margin-bottom:24px;">
+                    Your booking has been successfully cancelled.
+                    The studio owner has been notified via WhatsApp.
+                </p>
+                <a href="book.html" class="btn-primary">Book a New Appointment</a>
+            </div>
+
+            <div id="cancel-error" class="cancel-box" style="display:none;text-align:center;">
+                <p style="font-size:2.5rem;margin-bottom:16px;">❌</p>
+                <h2 style="margin-bottom:10px;">Booking Not Found</h2>
+                <p style="color:var(--grey);margin-bottom:24px;">
+                    This cancellation link is invalid or the booking has already been cancelled.
+                </p>
+                <a href="book.html" class="btn-primary">Make a New Booking</a>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>✨ Sera Glam Studio &copy; 2026 — Crafting Beauty, One Look at a Time.</p>
+    </footer>
+
+    <script src="js/cancel.js"></script>
+    <script src="js/theme.js"></script>
+
+</body>
+</html>

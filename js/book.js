@@ -301,21 +301,53 @@ async function addBooking() {
     showSuccess('✨ Booking confirmed! We will contact you shortly.');
 
     // ===== WHATSAPP NOTIFICATION TO OWNER =====
-    const ownerPhone = '254790549541';
-    const message =
+    const ownerPhone  = '254790549541';
+    const cancelURL   = 'https://geomn99.github.io/Sera-Glam-Studio/cancel.html?token=' + saved.cancelToken;
+ 
+    const ownerMessage =
         '🌸 *New Booking — Sera Glam Studio* 🌸' + '\n\n' +
-        '👤 *Client:* ' + saved.name + '\n' +
-        '📞 *Phone:* ' + saved.phone + '\n' +
-        '✉️ *Email:* ' + (saved.email || 'Not provided') + '\n\n' +
-        '💅 *Service:* ' + saved.service + '\n' +
-        '💰 *Price:* ' + saved.price + '\n' +
-        '⏱ *Duration:* ' + saved.duration + '\n\n' +
-        '📅 *Date:* ' + selectedDateDisplay + '\n' +
-        '🕐 *Time:* ' + slot.label + '\n\n' +
-        '📝 *Notes:* ' + (saved.notes || 'None');
-
-    const whatsappURL = 'https://wa.me/' + ownerPhone + '?text=' + encodeURIComponent(message);
-    window.open(whatsappURL, '_blank');
+        '👤 *Client:* '   + saved.name                       + '\n' +
+        '📞 *Phone:* '    + saved.phone                      + '\n' +
+        '✉️ *Email:* '    + (saved.email || 'Not provided')  + '\n\n' +
+        '💅 *Service:* '  + saved.service                    + '\n' +
+        '💰 *Price:* '    + saved.price                      + '\n' +
+        '⏱ *Duration:* '  + saved.duration                   + '\n\n' +
+        '📅 *Date:* '     + selectedDateDisplay              + '\n' +
+        '🕐 *Time:* '     + slot.label                       + '\n\n' +
+        '📝 *Notes:* '    + (saved.notes || 'None');
+ 
+    window.open(
+        'https://wa.me/' + ownerPhone + '?text=' + encodeURIComponent(ownerMessage),
+        '_blank'
+    );
+ 
+    // ===== WHATSAPP CONFIRMATION TO CLIENT =====
+    // Only send if the client provided a phone number (they always do — it's required)
+    // Format client number: strip leading 0, add 254 country code
+    const rawPhone    = saved.phone.replace(/\s/g, '');
+    const clientPhone = rawPhone.startsWith('0')
+        ? '254' + rawPhone.slice(1)
+        : rawPhone.startsWith('+')
+        ? rawPhone.slice(1)
+        : rawPhone;
+ 
+    const clientMessage =
+        '✨ *Booking Confirmed — Sera Glam Studio* ✨' + '\n\n' +
+        'Hi ' + saved.name + '! Your appointment has been booked.' + '\n\n' +
+        '💅 *Service:* '  + saved.service    + '\n' +
+        '📅 *Date:* '     + selectedDateDisplay + '\n' +
+        '🕐 *Time:* '     + slot.label        + '\n' +
+        '💰 *Price:* '    + saved.price       + '\n\n' +
+        'Need to cancel? Use this link:\n' + cancelURL + '\n\n' +
+        'See you soon! ✦ Sera Glam Studio';
+ 
+    // Small delay so the owner WhatsApp opens first
+    setTimeout(() => {
+        window.open(
+            'https://wa.me/' + clientPhone + '?text=' + encodeURIComponent(clientMessage),
+            '_blank'
+        );
+    }, 1200);
 
     // Reset form
     document.getElementById('client-name').value = '';
