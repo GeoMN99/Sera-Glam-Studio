@@ -387,7 +387,6 @@ async function deleteBooking(id) {
 document.addEventListener('DOMContentLoaded', async function () {
  
     await buildCalendar(currentMonth, currentYear);
-    await renderBookings();
  
     // ── Read URL params and pre-select service if present ──
     const params   = new URLSearchParams(window.location.search);
@@ -427,7 +426,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
  
     document.getElementById('book-btn').addEventListener('click', addBooking);
-    document.getElementById('clear-bookings-btn').addEventListener('click', clearAllBookings);
     document.getElementById('client-name').addEventListener('input', updateSummary);
     document.getElementById('client-phone').addEventListener('input', updateSummary);
     document.getElementById('service-category').addEventListener('change', updateServices);
