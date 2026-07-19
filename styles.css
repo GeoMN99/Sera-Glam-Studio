@@ -2057,3 +2057,90 @@ body.dark-mode .reschedule-form select {
 @media (max-width: 768px) {
     .cancel-box { padding: 25px 18px; }
 }
+
+/* =====================================================================
+   THEME-AWARE ANIMATION OVERRIDES — add to the bottom of styles.css
+   Handles light mode colours for hero and page header animations.
+   ===================================================================== */
+
+/* ── Hero: light mode text colours ── */
+body:not(.dark-mode) #hero {
+    cursor: auto;
+}
+
+body:not(.dark-mode) .hero-tagline {
+    color: var(--grey);
+}
+
+body:not(.dark-mode) .hero-subtitle {
+    color: rgba(26, 26, 26, 0.72);
+}
+
+body:not(.dark-mode) .hero-sparkle-center {
+    color: var(--purple);
+}
+
+body:not(.dark-mode) .hero-divider {
+    background: var(--purple);
+}
+
+body:not(.dark-mode) .hero-btn {
+    color        : var(--purple);
+    border-color : rgba(123, 47, 190, 0.4);
+}
+
+body:not(.dark-mode) .hero-btn:hover {
+    background   : rgba(123, 47, 190, 0.08);
+    border-color : var(--purple);
+    color        : var(--purple-dark);
+}
+
+/* ── Hero: light mode brand name shimmer (purple + gold) ── */
+.hero-brand.shimmer-light-active {
+    background : linear-gradient(
+        90deg,
+        #7B2FBE 0%, #7B2FBE 22%,
+        #C9A84C 40%, #9B59D6 50%, #C9A84C 60%,
+        #7B2FBE 78%, #7B2FBE 100%
+    );
+    background-size            : 260% auto;
+    -webkit-background-clip    : text;
+    background-clip            : text;
+    -webkit-text-fill-color    : transparent;
+    animation                  : shimmer-sweep 3.2s linear infinite;
+}
+
+/* ── Page header: light mode title shimmer ── */
+body:not(.dark-mode) .page-header h1.ph-title {
+    background : linear-gradient(
+        90deg,
+        #7B2FBE 0%, #7B2FBE 22%,
+        #C9A84C 40%, #9B59D6 50%, #C9A84C 60%,
+        #7B2FBE 78%, #7B2FBE 100%
+    );
+    background-size            : 260% auto;
+    -webkit-background-clip    : text;
+    background-clip            : text;
+    -webkit-text-fill-color    : transparent;
+    animation                  : ph-shimmer 3.5s linear infinite;
+    animation-delay            : 0.8s;
+}
+
+body:not(.dark-mode) .page-header h1.ph-title em {
+    -webkit-text-fill-color : transparent;
+    font-style              : italic;
+}
+
+/* ── Page header: light mode subtitle colour ── */
+body:not(.dark-mode) .page-header p.ph-subtitle {
+    color: var(--grey);
+}
+
+/* ── Cursor: hide custom cursor in light mode (less contrast) ── */
+body:not(.dark-mode) #hero {
+    cursor: auto;
+}
+
+body:not(.dark-mode) #cursor-canvas {
+    display: none;
+}

@@ -1,4 +1,4 @@
-// js/hero.js — Sera Glam Studio Hero Animation
+// js/hero.js — Sera Glam Studio Hero Animation (theme-aware)
 
 (function () {
     'use strict';
@@ -8,6 +8,64 @@
 
     const hero = document.getElementById('hero');
     if (!hero) return;
+
+    // ─── THEME HELPERS ────────────────────────────────────────────────
+    function isDark() {
+        return document.body.classList.contains('dark-mode');
+    }
+
+    function getColors() {
+        return isDark() ? {
+            bg           : '#0d0818',
+            particleDot  : '#c4b5fd',
+            particleStar : '#c4b5fd',
+            svgStroke    : '#7c3aed',
+            svgStrokeMid : '#8b5cf6',
+            trailColor   : '#ffd700',
+            shimmerClass : 'shimmer-active'
+        } : {
+            bg           : '#FAF7FE',
+            particleDot  : '#7B2FBE',
+            particleStar : '#9B59D6',
+            svgStroke    : '#7B2FBE',
+            svgStrokeMid : '#9B59D6',
+            trailColor   : '#7B2FBE',
+            shimmerClass : 'shimmer-light-active'
+        };
+    }
+
+    // Apply hero background
+    function applyBackground() {
+        hero.style.background = getColors().bg;
+    }
+    applyBackground();
+
+    // Apply SVG stroke colours
+    function applySVGColors() {
+        const c = getColors();
+        document.querySelectorAll('.lash-stroke').forEach((el, i) => {
+            el.setAttribute('stroke', i === 6 ? c.svgStrokeMid : c.svgStroke);
+        });
+        const base = document.getElementById('lash-base');
+        if (base) base.setAttribute('stroke', c.svgStroke);
+    }
+    applySVGColors();
+
+    // Apply correct shimmer class
+    let shimmerEnabled = false;
+    function applyShimmer() {
+        const brand = document.getElementById('hero-brand');
+        if (!brand || !shimmerEnabled) return;
+        brand.classList.remove('shimmer-active', 'shimmer-light-active');
+        brand.classList.add(getColors().shimmerClass);
+    }
+
+    // Watch for theme toggle changes
+    new MutationObserver(() => {
+        applyBackground();
+        applySVGColors();
+        applyShimmer();
+    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     // ─── CANVAS RESIZE HELPER ─────────────────────────────────────────
     function fitCanvas(canvas) {
@@ -20,14 +78,13 @@
     const pctx = pc.getContext('2d');
     fitCanvas(pc);
 
-    let cc = null; // cursor canvas — assigned below if not touch
+    let cc = null;
 
     window.addEventListener('resize', () => {
         fitCanvas(pc);
         if (cc) fitCanvas(cc);
     });
 
-    // Build particle pool
     const PARTICLE_COUNT = 55;
     const pts = Array.from({ length: PARTICLE_COUNT }, () => ({
         x      : Math.random() * pc.width,
@@ -61,6 +118,7 @@
     function tickParticles() {
         pctx.clearRect(0, 0, pc.width, pc.height);
         const t = performance.now() * 0.001;
+        const c = getColors(); // reads current theme each frame
 
         pts.forEach(p => {
             p.x += p.vx;  p.y += p.vy;
@@ -72,11 +130,11 @@
             const tw = p.alpha * (0.45 + 0.55 * Math.sin(t * 1.2 + p.phase));
 
             if (p.isStar) {
-                draw4Star(pctx, p.x, p.y, p.r * 2.8, tw, '#c4b5fd');
+                draw4Star(pctx, p.x, p.y, p.r * 2.8, tw, c.particleStar);
             } else {
                 pctx.beginPath();
                 pctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                pctx.fillStyle   = '#c4b5fd';
+                pctx.fillStyle   = c.particleDot;
                 pctx.globalAlpha = tw;
                 pctx.fill();
                 pctx.globalAlpha = 1;
@@ -86,11 +144,9 @@
     }
     tickParticles();
 
-    // ─── LASH INITIALISE (sets dashoffset so strokes are invisible) ───
-    // Called immediately so the browser registers the initial state
-    // long before the draw animation fires at 2 s.
+    // ─── LASH INITIALISE ──────────────────────────────────────────────
     const LASH_LENGTHS = [63, 73, 81, 87, 91, 94, 95, 94, 91, 87, 81, 73, 63];
-    const BASE_LENGTH  = 445; // arc-length approximation of the Q-bezier base
+    const BASE_LENGTH  = 445;
 
     function initLashDraw() {
         const base = document.getElementById('lash-base');
@@ -108,37 +164,34 @@
     }
     initLashDraw();
 
-    // ─── REDUCED MOTION: reveal everything immediately ────────────────
+    // ─── REDUCED MOTION ───────────────────────────────────────────────
     if (REDUCED) {
         const wrap = document.getElementById('hero-content-wrap');
         if (wrap) { wrap.style.clipPath = 'none'; wrap.style.transition = 'none'; }
 
-        document.getElementById('hero-brand')  ?.classList.add('shimmer-active');
+        shimmerEnabled = true;
+        applyShimmer();
+
         document.getElementById('hero-divider') ?.classList.add('fade-up-active');
         document.getElementById('hero-subtitle')?.classList.add('fade-up-active');
         document.getElementById('hero-cta')    ?.classList.add('fade-up-active');
 
         const base = document.getElementById('lash-base');
-        if (base) { base.style.strokeDashoffset = '0'; }
+        if (base) base.style.strokeDashoffset = '0';
         document.querySelectorAll('.lash-stroke').forEach(el => {
             el.style.strokeDashoffset = '0';
         });
-        return; // skip all timed animations
+        return;
     }
 
     // ─── 3. EYE-OPENING CLIP-PATH ─────────────────────────────────────
-    // CSS already sets initial clip-path = inset(50% 0 50% 0).
-    // At 800 ms we trigger the opening transition.
     const wrap = document.getElementById('hero-content-wrap');
     setTimeout(() => {
         wrap.style.transition = 'clip-path 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        // rAF ensures transition is registered before value changes
-        requestAnimationFrame(() => {
-            wrap.style.clipPath = 'inset(0% 0 0% 0)';
-        });
+        requestAnimationFrame(() => { wrap.style.clipPath = 'inset(0% 0 0% 0)'; });
     }, 800);
 
-    // ─── 4. LASH SVG DRAW (starts at 2 s, after eye fully opens) ─────
+    // ─── 4. LASH SVG DRAW ─────────────────────────────────────────────
     function startLashDraw() {
         const base = document.getElementById('lash-base');
         if (base) {
@@ -148,14 +201,11 @@
             });
         }
 
-        // Draw order: centre (index 6) first, edges last
         const drawOrder = [6, 5, 7, 4, 8, 3, 9, 2, 10, 1, 11, 0, 12];
         const strokes   = document.querySelectorAll('.lash-stroke');
-
         drawOrder.forEach((lashIdx, step) => {
             const el = strokes[lashIdx];
             if (!el) return;
-            // Base takes ~550 ms; lashes stagger every 75 ms after that
             setTimeout(() => {
                 el.style.transition         = 'stroke-dashoffset 0.32s ease';
                 el.style.strokeDashoffset   = '0';
@@ -164,7 +214,7 @@
     }
     setTimeout(startLashDraw, 2000);
 
-    // ─── 5. SPARKLE BURST (at 2 s) ───────────────────────────────────
+    // ─── 5. SPARKLE BURST ─────────────────────────────────────────────
     setTimeout(() => {
         const burst = document.getElementById('sparkle-burst');
         if (!burst) return;
@@ -173,25 +223,28 @@
             el.className = 'burst-star';
             el.style.setProperty('--angle',    (i / 14 * 360) + 'deg');
             el.style.setProperty('--distance', (72 + Math.random() * 88) + 'px');
-            el.style.animationDelay = (Math.random() * 0.14) + 's';
+            el.style.animationDelay = (Math.random() * 0.15) + 's';
+            // Use theme colour for burst stars
+            el.style.background = getColors().svgStroke;
             burst.appendChild(el);
             setTimeout(() => el.remove(), 1100);
         }
     }, 2000);
 
-    // ─── 6. SHIMMER TEXT (at 2.5 s) ──────────────────────────────────
+    // ─── 6. SHIMMER TEXT ──────────────────────────────────────────────
     setTimeout(() => {
-        document.getElementById('hero-brand')?.classList.add('shimmer-active');
+        shimmerEnabled = true;
+        applyShimmer();
     }, 2500);
 
-    // ─── 7. TAGLINE / CTA FADE-UP (at 2.9 s) ─────────────────────────
+    // ─── 7. TAGLINE / CTA FADE-UP ─────────────────────────────────────
     setTimeout(() => {
         document.getElementById('hero-divider') ?.classList.add('fade-up-active');
         document.getElementById('hero-subtitle')?.classList.add('fade-up-active');
         document.getElementById('hero-cta')    ?.classList.add('fade-up-active');
     }, 2900);
 
-    // ─── 8. CURSOR TRAIL (desktop / pointer devices only) ─────────────
+    // ─── 8. CURSOR TRAIL ──────────────────────────────────────────────
     if (!TOUCH) {
         cc = document.getElementById('cursor-canvas');
         const cctx = cc.getContext('2d');
@@ -210,9 +263,10 @@
         hero.addEventListener('mouseleave', () => { mx = -999; my = -999; });
 
         function drawTrailStar(ctx, x, y, size, alpha) {
+            const c = getColors();
             ctx.save();
             ctx.globalAlpha = alpha;
-            ctx.fillStyle   = '#ffd700';
+            ctx.fillStyle   = c.trailColor;
             ctx.translate(x, y);
             ctx.rotate(Math.PI / 4);
             ctx.beginPath();
@@ -229,10 +283,11 @@
         }
 
         function drawGlowDot(ctx, x, y) {
+            const dark = isDark();
             const g = ctx.createRadialGradient(x, y, 0, x, y, 14);
-            g.addColorStop(0,   'rgba(124, 58, 237, 0.58)');
-            g.addColorStop(0.4, 'rgba(124, 58, 237, 0.18)');
-            g.addColorStop(1,   'rgba(124, 58, 237, 0)');
+            g.addColorStop(0,   dark ? 'rgba(124,58,237,0.58)'  : 'rgba(123,47,190,0.4)');
+            g.addColorStop(0.4, dark ? 'rgba(124,58,237,0.18)'  : 'rgba(123,47,190,0.12)');
+            g.addColorStop(1,   'rgba(124,58,237,0)');
             ctx.beginPath();
             ctx.arc(x, y, 14, 0, Math.PI * 2);
             ctx.fillStyle = g;
@@ -240,7 +295,7 @@
 
             ctx.beginPath();
             ctx.arc(x, y, 3.5, 0, Math.PI * 2);
-            ctx.fillStyle    = '#c4b5fd';
+            ctx.fillStyle    = getColors().trailColor;
             ctx.globalAlpha  = 0.92;
             ctx.fill();
             ctx.globalAlpha  = 1;
