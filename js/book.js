@@ -1,5 +1,6 @@
 const API_URL          = 'https://sera-glam-backend.onrender.com/api/bookings';
 const AVAILABILITY_URL = 'https://sera-glam-backend.onrender.com/api/availability';
+const SITE_URL        = 'https://seraglamstudio.netlify.app';
 
 // Only ever holds { date, time } pairs — no personal data reaches this page.
 let bookings = [];
@@ -304,7 +305,7 @@ async function addBooking() {
     // BUG FIX: guard against null cancelToken (old DB rows created before
     // the cancelToken column was added will return null)
     const cancelURL = saved.cancelToken
-        ? 'https://geomn99.github.io/Sera-Glam-Studio/cancel.html?token=' + saved.cancelToken
+        ? SITE_URL + '/cancel.html?token=' + saved.cancelToken
         : null;
 
     const ownerMessage =
