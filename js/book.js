@@ -345,13 +345,12 @@ async function addBooking() {
         (cancelURL ? 'Need to cancel? Use this link:\n' + cancelURL + '\n\n' : '') +
         'See you soon! ✦ Sera Glam Studio';
 
-    // Small delay so the owner WhatsApp opens first
-    setTimeout(() => {
+
         window.open(
             'https://wa.me/' + clientPhone + '?text=' + encodeURIComponent(clientMessage),
             '_blank'
         );
-    }, 1200);
+
 
     // Reset form
     document.getElementById('client-name').value    = '';
