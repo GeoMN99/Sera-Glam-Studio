@@ -1,6 +1,6 @@
 const API_URL          = 'https://sera-glam-backend.onrender.com/api/bookings';
 const AVAILABILITY_URL = 'https://sera-glam-backend.onrender.com/api/availability';
-const SITE_URL         = 'https://YOUR-SITE.netlify.app'; // update with your Netlify URL
+const SITE_URL         = 'https://seraglamstudio.netlify.app';
 
 // ── EmailJS config — replace with your actual IDs from emailjs.com ──
 const EMAILJS_SERVICE_ID  = 'service_i1tb1bw';
