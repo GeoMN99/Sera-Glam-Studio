@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Page Not Found — Sera Glam Studio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>✨</text></svg>"/>
+    <link rel="stylesheet" href="styles.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <style>
+        .not-found-section {
+            min-height      : 80vh;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            text-align      : center;
+            padding         : 60px 20px;
+            background      : var(--purple-ultra-pale);
+        }
+
+        .not-found-box {
+            max-width : 560px;
+        }
+
+        .not-found-number {
+            font-family    : 'Cormorant Garamond', serif;
+            font-size      : clamp(7rem, 20vw, 12rem);
+            font-weight    : 300;
+            line-height    : 1;
+            color          : var(--purple);
+            opacity        : 0.18;
+            letter-spacing : 0.05em;
+            margin-bottom  : 0;
+            display        : block;
+        }
+
+        .not-found-sparkle {
+            font-size     : 2rem;
+            display       : block;
+            margin        : -20px auto 20px;
+            color         : var(--purple);
+        }
+
+        .not-found-box h1 {
+            font-family   : 'Cormorant Garamond', serif;
+            font-size     : clamp(2rem, 5vw, 3rem);
+            font-weight   : 300;
+            margin-bottom : 16px;
+            color         : var(--black);
+        }
+
+        .not-found-box h1 em {
+            color      : var(--purple);
+            font-style : italic;
+        }
+
+        .not-found-box p {
+            font-family    : 'Jost', sans-serif;
+            font-size      : 0.95rem;
+            color          : var(--grey);
+            line-height    : 1.7;
+            margin-bottom  : 36px;
+            letter-spacing : 0.5px;
+        }
+
+        .not-found-links {
+            display         : flex;
+            gap             : 14px;
+            justify-content : center;
+            flex-wrap       : wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html">✨ Sera Glam Studio</a></div>
+            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="book.html">Book Now</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Dark Mode">🌙</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="not-found-section">
+            <div class="not-found-box">
+                <span class="not-found-number">404</span>
+                <span class="not-found-sparkle">✦</span>
+                <h1>Page <em>Not Found</em></h1>
+                <p>
+                    The page you are looking for does not exist or may have been moved.<br/>
+                    Let us get you back to somewhere beautiful.
+                </p>
+                <div class="not-found-links">
+                    <a href="index.html" class="btn-primary">Go Home</a>
+                    <a href="book.html"  class="btn-outline">Book Appointment</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>✨ Sera Glam Studio &copy; 2026 — Crafting Beauty, One Look at a Time.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('nav-links');
+            nav.classList.toggle('open');
+        }
+    </script>
+    <script src="js/theme.js"></script>
+
+</body>
+</html>

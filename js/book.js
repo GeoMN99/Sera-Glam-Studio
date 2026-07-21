@@ -1,18 +1,21 @@
 const API_URL          = 'https://sera-glam-backend.onrender.com/api/bookings';
 const AVAILABILITY_URL = 'https://sera-glam-backend.onrender.com/api/availability';
-const SITE_URL        = 'https://seraglamstudio.netlify.app';
+const SITE_URL         = 'https://YOUR-SITE.netlify.app'; // update with your Netlify URL
 
-// Only ever holds { date, time } pairs — no personal data reaches this page.
+// ── EmailJS config — replace with your actual IDs from emailjs.com ──
+const EMAILJS_SERVICE_ID  = 'service_i1tb1bw';
+const EMAILJS_TEMPLATE_ID = 'template_qxnwxl6';
+const EMAILJS_PUBLIC_KEY  = '0_AM_K-z-xmqnNh6Z';
+
 let bookings = [];
 
-// ===== CALENDAR STATE =====
 let currentMonth        = new Date().getMonth();
 let currentYear         = new Date().getFullYear();
-let selectedDate        = null; // ISO format e.g. "2026-05-22" — sent to backend
-let selectedDateDisplay = null; // human readable e.g. "Friday, May 22, 2026"
+let selectedDate        = null;
+let selectedDateDisplay = null;
 let selectedTime        = null;
 
-// ===== ALL TIME SLOTS =====
+// ===== ALL TIME SLOTS (updated: last slot is 4PM, no 5PM) =====
 const allTimeSlots = [
     { value: '08:00', label: '8:00 AM' },
     { value: '09:00', label: '9:00 AM' },
@@ -23,10 +26,8 @@ const allTimeSlots = [
     { value: '14:00', label: '2:00 PM' },
     { value: '15:00', label: '3:00 PM' },
     { value: '16:00', label: '4:00 PM' },
-    { value: '17:00', label: '5:00 PM' },
 ];
 
-// ===== SERVICE DATA =====
 const serviceData = {
     lashes: [
         { name: 'Classic Lashes',    price: 'Ksh 1,500', duration: '90 mins'   },
@@ -36,14 +37,13 @@ const serviceData = {
         { name: 'Lash Infills',      price: 'Ksh 1,000', duration: '60 mins'   },
     ],
     wigs: [
-        { name: 'Wig Install',         price: 'Ksh 1,500', duration: '60 mins'  },
-        { name: 'Wig Install & Style', price: 'Ksh 2,500', duration: '2 hours'  },
-        { name: 'Wig Styling Only',    price: 'Ksh 1,000', duration: '60 mins'  },
-        { name: 'Wig Maintenance',     price: 'Ksh 800',   duration: '45 mins'  },
+        { name: 'Wig Install',         price: 'Ksh 1,500', duration: '60 mins' },
+        { name: 'Wig Install & Style', price: 'Ksh 2,500', duration: '2 hours' },
+        { name: 'Wig Styling Only',    price: 'Ksh 1,000', duration: '60 mins' },
+        { name: 'Wig Maintenance',     price: 'Ksh 800',   duration: '45 mins' },
     ]
 };
 
-// ===== HELPER: format a Date object as ISO "YYYY-MM-DD" =====
 function toISODate(date) {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -51,7 +51,11 @@ function toISODate(date) {
     return `${y}-${m}-${d}`;
 }
 
-// ===== FETCH AVAILABILITY FROM SERVER (no personal data) =====
+// ===== WORKING HOURS: check if a date is Sunday =====
+function isSunday(dateStr) {
+    return new Date(dateStr + 'T00:00:00').getDay() === 0;
+}
+
 async function fetchBookings() {
     try {
         const response = await fetch(AVAILABILITY_URL);
@@ -63,12 +67,10 @@ async function fetchBookings() {
     }
 }
 
-// ===== BUILD CALENDAR =====
 async function buildCalendar(month, year) {
     const grid           = document.getElementById('calendar-grid');
     const monthYearLabel = document.getElementById('calendar-month-year');
 
-    // Show loading state immediately
     grid.innerHTML = `
         <div class="cal-loading" style="grid-column:1/-1">
             <div class="cal-spinner"></div>
@@ -76,8 +78,6 @@ async function buildCalendar(month, year) {
         </div>
     `;
 
-    // If the server takes more than 5s (Render cold start),
-    // show a more informative message so the user doesn't leave
     const slowTimer = setTimeout(() => {
         const msg = document.getElementById('cal-loading-msg');
         if (msg) msg.textContent = 'Still connecting… may take up to 60 s on first load';
@@ -85,14 +85,10 @@ async function buildCalendar(month, year) {
 
     await fetchBookings();
     clearTimeout(slowTimer);
-
-    // Build the actual calendar
     grid.innerHTML = '';
 
-    const monthNames = [
-        'January','February','March','April','May','June',
-        'July','August','September','October','November','December'
-    ];
+    const monthNames = ['January','February','March','April','May','June',
+        'July','August','September','October','November','December'];
     monthYearLabel.textContent = `${monthNames[month]} ${year}`;
 
     const firstDay  = new Date(year, month, 1).getDay();
@@ -117,10 +113,13 @@ async function buildCalendar(month, year) {
 
         if (thisDate < today) {
             dayEl.classList.add('past');
+        } else if (isSunday(dateStr)) {
+            // Mark Sundays as unavailable
+            dayEl.classList.add('past');
+            dayEl.title = 'Closed on Sundays';
         } else {
             const hasBookings = bookings.some(b => b.date === dateStr);
             if (hasBookings) dayEl.classList.add('has-bookings');
-
             if (thisDate.getTime() === today.getTime()) dayEl.classList.add('today');
             if (selectedDate === dateStr) dayEl.classList.add('selected');
 
@@ -148,7 +147,6 @@ async function buildCalendar(month, year) {
     }
 }
 
-// ===== RENDER TIME SLOTS =====
 function renderTimeSlots(dateStr) {
     const container = document.getElementById('time-slots-container');
     const grid      = document.getElementById('time-slots-grid');
@@ -178,12 +176,10 @@ function renderTimeSlots(dateStr) {
                 updateSummary();
             });
         }
-
         grid.appendChild(btn);
     });
 }
 
-// ===== UPDATE SERVICE DROPDOWN =====
 function updateServices() {
     const category     = document.getElementById('service-category').value;
     const serviceSelect = document.getElementById('service-type');
@@ -197,11 +193,9 @@ function updateServices() {
             serviceSelect.appendChild(option);
         });
     }
-
     updateSummary();
 }
 
-// ===== UPDATE BOOKING SUMMARY =====
 function updateSummary() {
     const name         = document.getElementById('client-name').value.trim();
     const phone        = document.getElementById('client-phone').value.trim();
@@ -230,7 +224,6 @@ function updateSummary() {
     }
 }
 
-// ===== SHOW SUCCESS MESSAGE =====
 function showSuccess(message) {
     const msg = document.createElement('div');
     msg.classList.add('success-message');
@@ -240,7 +233,31 @@ function showSuccess(message) {
     setTimeout(() => msg.remove(), 2500);
 }
 
-// ===== ADD BOOKING =====
+// ===== EMAILJS: send confirmation email to client =====
+async function sendConfirmationEmail(booking, timeLabel, cancelURL) {
+    if (!booking.email) return; // email is optional — skip if not provided
+    try {
+        await emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID,
+            {
+                to_name    : booking.name,
+                to_email   : booking.email,
+                service    : booking.service,
+                date       : booking.date,
+                time       : timeLabel,
+                price      : booking.price,
+                cancel_url : cancelURL || 'Contact us to cancel'
+            },
+            EMAILJS_PUBLIC_KEY
+        );
+        console.log('Confirmation email sent to', booking.email);
+    } catch (err) {
+        // Email failure should never break the booking flow
+        console.warn('Could not send confirmation email:', err);
+    }
+}
+
 async function addBooking() {
     const name         = document.getElementById('client-name').value.trim();
     const phone        = document.getElementById('client-phone').value.trim();
@@ -258,9 +275,7 @@ async function addBooking() {
     const slot    = allTimeSlots.find(s => s.value === selectedTime);
 
     const newBooking = {
-        name,
-        phone,
-        email,
+        name, phone, email,
         service : service.name,
         price   : service.price,
         duration: service.duration,
@@ -299,15 +314,16 @@ async function addBooking() {
     await buildCalendar(currentMonth, currentYear);
     showSuccess('✨ Booking confirmed! We will contact you shortly.');
 
-    // ===== WHATSAPP NOTIFICATION TO OWNER =====
-    const ownerPhone = '254790549541';
-
-    // BUG FIX: guard against null cancelToken (old DB rows created before
-    // the cancelToken column was added will return null)
+    // Cancel link
     const cancelURL = saved.cancelToken
         ? SITE_URL + '/cancel.html?token=' + saved.cancelToken
         : null;
 
+    // Send email confirmation to client
+    sendConfirmationEmail(saved, slot.label, cancelURL);
+
+    // WhatsApp to owner
+    const ownerPhone   = '254790549541';
     const ownerMessage =
         '🌸 *New Booking — Sera Glam Studio* 🌸' + '\n\n' +
         '👤 *Client:* '  + saved.name                      + '\n' +
@@ -325,8 +341,7 @@ async function addBooking() {
         '_blank'
     );
 
-    // ===== WHATSAPP CONFIRMATION TO CLIENT =====
-    // Format client number: strip spaces, strip leading 0, add 254 country code
+    // WhatsApp to client
     const rawPhone    = saved.phone.replace(/\s/g, '');
     const clientPhone = rawPhone.startsWith('0')
         ? '254' + rawPhone.slice(1)
@@ -341,16 +356,13 @@ async function addBooking() {
         '📅 *Date:* '    + selectedDateDisplay + '\n' +
         '🕐 *Time:* '    + slot.label          + '\n' +
         '💰 *Price:* '   + saved.price         + '\n\n' +
-        // BUG FIX: only include cancel link if token exists
         (cancelURL ? 'Need to cancel? Use this link:\n' + cancelURL + '\n\n' : '') +
         'See you soon! ✦ Sera Glam Studio';
 
-
-        window.open(
-            'https://wa.me/' + clientPhone + '?text=' + encodeURIComponent(clientMessage),
-            '_blank'
-        );
-
+    window.open(
+        'https://wa.me/' + clientPhone + '?text=' + encodeURIComponent(clientMessage),
+        '_blank'
+    );
 
     // Reset form
     document.getElementById('client-name').value    = '';
@@ -362,38 +374,23 @@ async function addBooking() {
     document.getElementById('appt-date').value      = '';
     document.getElementById('appt-time').value      = '';
 
-    selectedDate        = null;
-    selectedDateDisplay = null;
-    selectedTime        = null;
+    selectedDate = null; selectedDateDisplay = null; selectedTime = null;
     document.getElementById('selected-date-label').textContent = 'Select a date to see available slots';
     document.getElementById('time-slots-container').style.display = 'none';
-
     updateSummary();
 }
 
-// ===== CANCEL A BOOKING =====
-// Not wired to any UI on the public page — cancellation handled via
-// cancel.html (token link) or the admin dashboard.
 async function deleteBooking(id) {
     try {
         const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-        if (!response.ok) {
-            console.error('Could not cancel booking', id);
-            return;
-        }
+        if (!response.ok) { console.error('Could not cancel booking', id); return; }
         await buildCalendar(currentMonth, currentYear);
-    } catch (err) {
-        console.error(err);
-    }
+    } catch (err) { console.error(err); }
 }
 
-// ===== EVENT LISTENERS =====
 document.addEventListener('DOMContentLoaded', async function () {
-
     await buildCalendar(currentMonth, currentYear);
 
-    // Read URL params and pre-select service if present
-    // e.g. book.html?category=lashes&service=1
     const params   = new URLSearchParams(window.location.search);
     const category = params.get('category');
     const service  = params.get('service');
@@ -403,14 +400,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (catSelect) {
             catSelect.value = category;
             updateServices();
-
             if (service !== null) {
                 const svcSelect = document.getElementById('service-type');
                 setTimeout(() => {
-                    if (svcSelect) {
-                        svcSelect.value = service;
-                        updateSummary();
-                    }
+                    if (svcSelect) { svcSelect.value = service; updateSummary(); }
                 }, 50);
             }
         }
