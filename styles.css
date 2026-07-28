@@ -2144,3 +2144,328 @@ body:not(.dark-mode) #hero {
 body:not(.dark-mode) #cursor-canvas {
     display: none;
 }
+
+/* ── Smooth scroll ── */
+html { scroll-behavior: smooth; }
+
+/* ── Back to top button ── */
+.back-to-top {
+    position        : fixed;
+    bottom          : 32px;
+    right           : 32px;
+    z-index         : 500;
+    width           : 44px;
+    height          : 44px;
+    border-radius   : 50%;
+    background      : var(--purple);
+    color           : var(--white);
+    border          : none;
+    font-size       : 1.2rem;
+    cursor          : pointer;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    box-shadow      : 0 4px 18px rgba(123,47,190,0.35);
+    opacity         : 0;
+    transform       : translateY(12px);
+    transition      : opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+    pointer-events  : none;
+}
+
+.back-to-top.visible {
+    opacity        : 1;
+    transform      : translateY(0);
+    pointer-events : all;
+}
+
+.back-to-top:hover {
+    background : var(--purple-dark);
+}
+
+@media (max-width: 768px) {
+    .back-to-top { bottom: 20px; right: 20px; width: 40px; height: 40px; }
+}
+
+/* ── Booking form progress indicator ── */
+.booking-progress {
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    gap             : 0;
+    margin-bottom   : 36px;
+    padding-bottom  : 28px;
+    border-bottom   : 1px solid var(--grey-light);
+}
+
+.progress-step {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    gap            : 6px;
+    position       : relative;
+    flex           : 1;
+    max-width      : 120px;
+}
+
+.progress-step-circle {
+    width           : 32px;
+    height          : 32px;
+    border-radius   : 50%;
+    border          : 2px solid var(--grey-light);
+    background      : var(--white);
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    font-size       : 0.78rem;
+    font-weight     : 600;
+    color           : var(--grey);
+    transition      : all 0.3s ease;
+    z-index         : 1;
+}
+
+.progress-step-label {
+    font-size      : 0.68rem;
+    letter-spacing : 1px;
+    text-transform : uppercase;
+    color          : var(--grey);
+    text-align     : center;
+    transition     : color 0.3s ease;
+    white-space    : nowrap;
+}
+
+/* Connector line between steps */
+.progress-connector {
+    flex        : 1;
+    height      : 2px;
+    background  : var(--grey-light);
+    margin-top  : -20px; /* align with circle centres */
+    transition  : background 0.3s ease;
+    max-width   : 60px;
+}
+
+/* Active step */
+.progress-step.active .progress-step-circle {
+    background   : var(--purple);
+    border-color : var(--purple);
+    color        : var(--white);
+}
+.progress-step.active .progress-step-label {
+    color : var(--purple);
+}
+
+/* Completed step */
+.progress-step.completed .progress-step-circle {
+    background   : var(--purple-pale);
+    border-color : var(--purple);
+    color        : var(--purple);
+}
+.progress-step.completed .progress-step-label {
+    color : var(--purple-light);
+}
+.progress-connector.completed {
+    background : var(--purple);
+}
+
+body.dark-mode .progress-step-circle {
+    background   : #1A1A2E;
+    border-color : #2E2E3E;
+}
+body.dark-mode .progress-step.active .progress-step-circle {
+    background   : var(--purple);
+    border-color : var(--purple);
+    color        : #fff;
+}
+body.dark-mode .progress-step.completed .progress-step-circle {
+    background   : #2A1A3E;
+    border-color : var(--purple);
+}
+
+/* ── Micro-animations: service dropdown ── */
+@keyframes slot-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.time-slot {
+    animation : slot-fade-in 0.22s ease both;
+}
+
+/* Stagger each slot slightly */
+.time-slot:nth-child(1) { animation-delay: 0.00s; }
+.time-slot:nth-child(2) { animation-delay: 0.04s; }
+.time-slot:nth-child(3) { animation-delay: 0.08s; }
+.time-slot:nth-child(4) { animation-delay: 0.12s; }
+.time-slot:nth-child(5) { animation-delay: 0.16s; }
+.time-slot:nth-child(6) { animation-delay: 0.20s; }
+.time-slot:nth-child(7) { animation-delay: 0.24s; }
+.time-slot:nth-child(8) { animation-delay: 0.28s; }
+.time-slot:nth-child(9) { animation-delay: 0.32s; }
+
+/* Summary panel value update flash */
+@keyframes summary-flash {
+    0%   { color: var(--purple); }
+    100% { color: var(--black);  }
+}
+
+.summary-value.updated {
+    animation: summary-flash 0.5s ease;
+}
+
+/* ── Calendar skeleton ── */
+.cal-skeleton {
+    display                 : grid;
+    grid-template-columns   : repeat(7, 1fr);
+    gap                     : 4px;
+    padding                 : 4px 0;
+}
+
+.cal-skeleton-cell {
+    aspect-ratio : 1;
+    border-radius: 2px;
+    background   : linear-gradient(
+        90deg,
+        var(--grey-light) 25%,
+        rgba(200,200,200,0.4) 50%,
+        var(--grey-light) 75%
+    );
+    background-size : 200% 100%;
+    animation       : skeleton-shimmer 1.4s infinite;
+}
+
+@keyframes skeleton-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+body.dark-mode .cal-skeleton-cell {
+    background : linear-gradient(
+        90deg,
+        #2E2E3E 25%,
+        #3E3E5E 50%,
+        #2E2E3E 75%
+    );
+    background-size : 200% 100%;
+    animation       : skeleton-shimmer 1.4s infinite;
+}
+
+/* ── Sunday / closed day tooltip ── */
+.cal-day.closed {
+    position : relative;
+    color    : var(--grey-light) !important;
+    cursor   : not-allowed !important;
+}
+
+.cal-day.closed::after {
+    content          : 'Closed';
+    position         : absolute;
+    bottom           : calc(100% + 6px);
+    left             : 50%;
+    transform        : translateX(-50%);
+    background       : var(--black);
+    color            : var(--white);
+    font-size        : 0.65rem;
+    letter-spacing   : 1px;
+    padding          : 3px 8px;
+    border-radius    : 2px;
+    white-space      : nowrap;
+    opacity          : 0;
+    pointer-events   : none;
+    transition       : opacity 0.2s ease;
+    z-index          : 10;
+}
+
+.cal-day.closed:hover::after { opacity: 1; }
+
+body.dark-mode .cal-day.closed::after {
+    background : #F0F0F0;
+    color      : #0F0F1A;
+}
+
+/* ── Testimonials section ── */
+.testimonials {
+    padding    : 80px 40px;
+    background : var(--white);
+    text-align : center;
+}
+
+.testimonials h2 {
+    font-family   : 'Cormorant Garamond', serif;
+    font-size     : clamp(2rem, 4vw, 3rem);
+    font-weight   : 300;
+    margin-bottom : 50px;
+}
+
+.testimonials h2 em {
+    color      : var(--purple);
+    font-style : italic;
+}
+
+.testimonials-grid {
+    display         : flex;
+    gap             : 25px;
+    justify-content : center;
+    flex-wrap       : wrap;
+    max-width       : 1100px;
+    margin          : 0 auto 40px;
+}
+
+.testimonial-card {
+    background    : var(--purple-ultra-pale);
+    border-radius : 4px;
+    padding       : 32px 28px;
+    flex          : 1 1 280px;
+    max-width     : 340px;
+    text-align    : left;
+    border-top    : 2px solid var(--purple);
+    transition    : transform 0.2s ease;
+}
+
+.testimonial-card:hover { transform: translateY(-4px); }
+
+.testimonial-stars {
+    color         : var(--gold);
+    font-size     : 0.9rem;
+    margin-bottom : 14px;
+    letter-spacing: 2px;
+}
+
+.testimonial-text {
+    font-family   : 'Cormorant Garamond', serif;
+    font-size     : 1.05rem;
+    font-style    : italic;
+    color         : var(--black);
+    line-height   : 1.7;
+    margin-bottom : 18px;
+}
+
+.testimonial-author {
+    font-size      : 0.78rem;
+    letter-spacing : 2px;
+    text-transform : uppercase;
+    color          : var(--purple);
+    font-weight    : 500;
+}
+
+.testimonial-service {
+    font-size  : 0.75rem;
+    color      : var(--grey);
+    margin-top : 3px;
+}
+
+/* Dark mode testimonials */
+body.dark-mode .testimonials { background: var(--purple-ultra-pale); }
+body.dark-mode .testimonial-card { background: #1A1A2E; }
+
+@media (max-width: 768px) {
+    .testimonials { padding: 60px 20px; }
+    .testimonials-grid { flex-direction: column; align-items: center; }
+    .testimonial-card { max-width: 100%; }
+    .booking-progress { gap: 0; }
+    .progress-step-label { font-size: 0.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-skeleton-cell { animation: none; background: var(--grey-light); }
+    .time-slot         { animation: none; }
+    .back-to-top       { transition: none; }
+}

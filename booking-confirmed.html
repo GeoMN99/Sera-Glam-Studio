@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Booking Confirmed — Sera Glam Studio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>✨</text></svg>"/>
+    <link rel="stylesheet" href="styles.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <style>
+        .confirmed-section {
+            min-height      : 88vh;
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            padding         : 60px 20px;
+            background      : var(--purple-ultra-pale);
+        }
+
+        .confirmed-box {
+            background    : var(--white);
+            border        : 1px solid var(--grey-light);
+            border-radius : 4px;
+            padding       : 52px 44px;
+            max-width     : 560px;
+            width         : 100%;
+            text-align    : center;
+            animation     : confirm-fade-up 0.7s ease both;
+        }
+
+        @keyframes confirm-fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .confirmed-icon {
+            width         : 72px;
+            height        : 72px;
+            border-radius : 50%;
+            background    : rgba(123, 47, 190, 0.08);
+            display       : flex;
+            align-items   : center;
+            justify-content: center;
+            margin        : 0 auto 24px;
+            font-size     : 2rem;
+        }
+
+        .confirmed-box h1 {
+            font-family   : 'Cormorant Garamond', serif;
+            font-size     : clamp(2rem, 5vw, 2.8rem);
+            font-weight   : 300;
+            margin-bottom : 10px;
+            color         : var(--black);
+        }
+
+        .confirmed-box h1 em {
+            color      : var(--purple);
+            font-style : italic;
+        }
+
+        .confirmed-tagline {
+            font-size     : 0.9rem;
+            color         : var(--grey);
+            margin-bottom : 32px;
+            letter-spacing: 0.5px;
+        }
+
+        .confirmed-details {
+            background    : var(--purple-ultra-pale);
+            border-radius : 4px;
+            padding       : 24px 28px;
+            margin-bottom : 28px;
+            text-align    : left;
+        }
+
+        .confirmed-details .summary-item {
+            padding    : 10px 0;
+            border-bottom: 1px solid rgba(123,47,190,0.1);
+        }
+
+        .confirmed-details .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .confirmed-actions {
+            display        : flex;
+            flex-direction : column;
+            gap            : 12px;
+            margin-bottom  : 28px;
+        }
+
+        .cal-add-btn {
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            gap             : 8px;
+            padding         : 14px 24px;
+            border          : 1px solid var(--grey-light);
+            border-radius   : 2px;
+            font-family     : 'Jost', sans-serif;
+            font-size       : 0.82rem;
+            letter-spacing  : 1.5px;
+            text-transform  : uppercase;
+            text-decoration : none;
+            color           : var(--black);
+            background      : var(--white);
+            cursor          : pointer;
+            transition      : all 0.2s ease;
+        }
+
+        .cal-add-btn:hover {
+            border-color : var(--purple);
+            color        : var(--purple);
+            background   : var(--purple-pale);
+        }
+
+        .confirmed-cancel-link {
+            font-size   : 0.82rem;
+            color       : var(--grey);
+            margin-top  : 6px;
+        }
+
+        .confirmed-cancel-link a {
+            color           : var(--purple-light);
+            text-decoration : underline;
+        }
+
+        .confirmed-sparkle {
+            font-size    : 0.82rem;
+            color        : var(--grey);
+            margin-top   : 24px;
+            padding-top  : 20px;
+            border-top   : 1px solid var(--grey-light);
+            letter-spacing: 0.5px;
+        }
+
+        /* Dark mode */
+        body.dark-mode .confirmed-box {
+            background   : #1A1A2E;
+            border-color : #2E2E3E;
+        }
+        body.dark-mode .confirmed-details {
+            background : #2A1A3E;
+        }
+        body.dark-mode .confirmed-icon {
+            background : rgba(155, 89, 214, 0.15);
+        }
+        body.dark-mode .cal-add-btn {
+            background   : #1A1A2E;
+            border-color : #2E2E3E;
+            color        : #F0F0F0;
+        }
+        body.dark-mode .cal-add-btn:hover {
+            border-color : var(--purple);
+            color        : var(--purple-light);
+            background   : #2A1A3E;
+        }
+
+        @media (max-width: 768px) {
+            .confirmed-box { padding: 36px 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .confirmed-box { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html">✨ Sera Glam Studio</a></div>
+            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="book.html">Book Now</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Dark Mode">🌙</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="confirmed-section">
+            <div class="confirmed-box">
+
+                <div class="confirmed-icon">✨</div>
+
+                <h1>You're <em>Confirmed!</em></h1>
+                <p class="confirmed-tagline">Your appointment has been booked successfully.</p>
+
+                <!-- Booking details — populated by JS from URL params -->
+                <div class="confirmed-details" id="confirmed-details">
+                    <div class="summary-item">
+                        <span class="summary-label">Name</span>
+                        <span class="summary-value" id="c-name">—</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Service</span>
+                        <span class="summary-value" id="c-service">—</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Date</span>
+                        <span class="summary-value" id="c-date">—</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Time</span>
+                        <span class="summary-value" id="c-time">—</span>
+                    </div>
+                    <div class="summary-item total-row">
+                        <span class="summary-label">Price</span>
+                        <span class="summary-value" id="c-price">—</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="confirmed-actions">
+                    <a id="gcal-btn" href="#" target="_blank" class="cal-add-btn">
+                        📅 Add to Google Calendar
+                    </a>
+                    <a href="book.html" class="btn-outline">Book Another Appointment</a>
+                    <a href="index.html" class="btn-primary">Back to Home</a>
+                </div>
+
+                <!-- Cancel link -->
+                <p class="confirmed-cancel-link" id="cancel-link-wrap" style="display:none;">
+                    Need to cancel?
+                    <a id="cancel-link" href="#">Click here to cancel this booking</a>
+                </p>
+
+                <p class="confirmed-sparkle">
+                    ✦ We will confirm your booking via WhatsApp shortly.<br/>
+                    Please arrive 10 minutes before your appointment.
+                </p>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>✨ Sera Glam Studio &copy; 2026 — Crafting Beauty, One Look at a Time.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('nav-links').classList.toggle('open');
+        }
+
+        // Read booking details from URL params
+        // e.g. booking-confirmed.html?name=Jane&service=Hybrid+Lashes&date=2026-07-25&time=10:00&price=Ksh+2,000&token=abc123
+        document.addEventListener('DOMContentLoaded', function () {
+            const params  = new URLSearchParams(window.location.search);
+            const name    = params.get('name')    || '—';
+            const service = params.get('service') || '—';
+            const date    = params.get('date')    || '—';
+            const time    = params.get('time')    || '—';
+            const price   = params.get('price')   || '—';
+            const token   = params.get('token');
+
+            document.getElementById('c-name').textContent    = name;
+            document.getElementById('c-service').textContent = service;
+            document.getElementById('c-date').textContent    = date;
+            document.getElementById('c-time').textContent    = time;
+            document.getElementById('c-price').textContent   = price;
+
+            // Cancel link
+            if (token) {
+                const cancelWrap = document.getElementById('cancel-link-wrap');
+                const cancelLink = document.getElementById('cancel-link');
+                cancelLink.href  = 'cancel.html?token=' + token;
+                cancelWrap.style.display = 'block';
+            }
+
+            // Google Calendar link
+            // Format date for Google Calendar: YYYYMMDD
+            const gcalBtn = document.getElementById('gcal-btn');
+            if (date && date !== '—' && time && time !== '—') {
+                try {
+                    // Parse ISO date + time
+                    const [y, m, d]   = date.split('-');
+                    const [h, min]    = time.split(':');
+                    const startDT     = `${y}${m}${d}T${h}${min}00`;
+
+                    // Add 1 hour for end time (rough estimate)
+                    const endHour     = String(parseInt(h) + 1).padStart(2, '0');
+                    const endDT       = `${y}${m}${d}T${endHour}${min}00`;
+
+                    const gcalURL = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+                        '&text=' + encodeURIComponent('Sera Glam Studio — ' + service) +
+                        '&dates=' + startDT + '/' + endDT +
+                        '&details=' + encodeURIComponent('Appointment at Sera Glam Studio\nService: ' + service + '\nPrice: ' + price) +
+                        '&location=' + encodeURIComponent('Sera Glam Studio, Nairobi, Kenya');
+
+                    gcalBtn.href = gcalURL;
+                } catch (e) {
+                    gcalBtn.style.display = 'none';
+                }
+            } else {
+                gcalBtn.style.display = 'none';
+            }
+        });
+    </script>
+
+    <script src="js/theme.js"></script>
+    <script src="js/ux.js"></script>
+
+</body>
+</html>
