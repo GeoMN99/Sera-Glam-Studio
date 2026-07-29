@@ -183,21 +183,36 @@ function renderTimeSlots(dateStr) {
     const grid      = document.getElementById('time-slots-grid');
     container.style.display = 'block';
     grid.innerHTML = '';
- 
+
     const bookedTimes = bookings
         .filter(b => b.date === dateStr)
         .map(b => b.time);
- 
+
+    // Check if selected date is today
+    const now       = new Date();
+    const todayStr  = toISODate(now);
+    const isToday   = dateStr === todayStr;
+    const nowHour   = now.getHours();
+    const nowMinute = now.getMinutes();
+
     allTimeSlots.forEach(slot => {
         const btn = document.createElement('button');
         btn.classList.add('time-slot');
         btn.textContent = slot.label;
         btn.setAttribute('data-time', slot.value);
- 
-        if (bookedTimes.includes(slot.value)) {
+
+        // Check if this slot is in the past (for today only)
+        const [slotHour, slotMin] = slot.value.split(':').map(Number);
+        const slotPassed = isToday && (
+            slotHour < nowHour ||
+            (slotHour === nowHour && slotMin <= nowMinute)
+        );
+
+        if (bookedTimes.includes(slot.value) || slotPassed) {
             btn.classList.add('booked');
-            btn.textContent = slot.label + ' ✗';
+            btn.textContent = slot.label + (slotPassed && !bookedTimes.includes(slot.value) ? ' ✕' : ' ✗');
             btn.disabled = true;
+            if (slotPassed) btn.title = 'This time has already passed';
         } else {
             btn.addEventListener('click', function () {
                 document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected-slot'));
@@ -208,6 +223,7 @@ function renderTimeSlots(dateStr) {
                 updateProgress();
             });
         }
+
         grid.appendChild(btn);
     });
 }
