@@ -19,7 +19,7 @@
 
     <main>
 
-        <!-- ===== LOGIN SCREEN ===== -->
+        <!-- Login Screen -->
         <section class="admin-login" id="admin-login">
             <div class="admin-login-box">
                 <h1>Owner <em>Login</em></h1>
@@ -29,14 +29,13 @@
                     <input type="password" id="admin-password-input" placeholder="Enter owner password"/>
                 </div>
                 <button id="admin-login-btn" class="btn-primary full-width">Login</button>
-                <p class="admin-error" id="admin-error"
-                   style="display:none;color:#cc0000;margin-top:15px;text-align:center;">
+                <p id="admin-error" style="display:none;color:#cc0000;margin-top:15px;text-align:center;">
                     ❌ Incorrect password. Try again.
                 </p>
             </div>
         </section>
 
-        <!-- ===== ADMIN DASHBOARD ===== -->
+        <!-- Admin Dashboard -->
         <section class="admin-dashboard" id="admin-dashboard" style="display:none;">
 
             <section class="page-header">
@@ -49,33 +48,40 @@
                 <!-- Toolbar -->
                 <div class="admin-toolbar">
                     <p id="admin-booking-count" class="admin-count">Loading…</p>
-                    <button id="admin-refresh-btn"    class="btn-outline">↻ Refresh</button>
-                    <button id="admin-change-pw-btn"  class="btn-outline">🔑 Change Password</button>
-                    <button id="admin-clear-all-btn"  class="btn-danger">🗑 Clear All</button>
-                    <button id="admin-logout-btn"     class="btn-outline">Logout</button>
+                    <button id="admin-refresh-btn"   class="btn-outline">↻ Refresh</button>
+                    <button id="admin-change-pw-btn" class="btn-outline">🔑 Change Password</button>
+                    <button id="admin-clear-all-btn" class="btn-danger">🗑 Clear All</button>
+                    <button id="admin-logout-btn"    class="btn-outline">Logout</button>
                 </div>
 
-                <!-- Password change form (hidden by default) -->
+                <!-- Search -->
+                <div class="admin-search-bar">
+                    <input type="text" id="admin-search"
+                           placeholder="Search by name, phone, service or date…"/>
+                </div>
+
+                <!-- Tabs -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" id="tab-upcoming">Upcoming</button>
+                    <button class="admin-tab" id="tab-past">Past</button>
+                </div>
+
+                <!-- Password change form -->
                 <div id="pw-change-section" class="pw-change-box" style="display:none;">
                     <h3>Change Password</h3>
-
                     <div class="form-group">
                         <label for="current-password">Current Password</label>
                         <input type="password" id="current-password" placeholder="Your current password"/>
                     </div>
-
                     <div class="form-group">
                         <label for="new-password">New Password</label>
                         <input type="password" id="new-password" placeholder="At least 6 characters"/>
                     </div>
-
                     <div class="form-group">
                         <label for="confirm-password">Confirm New Password</label>
                         <input type="password" id="confirm-password" placeholder="Repeat new password"/>
                     </div>
-
                     <p id="pw-feedback" style="font-size:0.85rem;margin:8px 0 14px;min-height:20px;"></p>
-
                     <div style="display:flex;gap:12px;">
                         <button id="pw-submit-btn" class="btn-primary">Update Password</button>
                         <button id="pw-cancel-btn" class="btn-outline">Cancel</button>
@@ -86,7 +92,6 @@
                 <ul id="admin-bookings-list"></ul>
 
             </section>
-
         </section>
 
     </main>

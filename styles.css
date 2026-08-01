@@ -2469,3 +2469,124 @@ body.dark-mode .testimonial-card { background: #1A1A2E; }
     .time-slot         { animation: none; }
     .back-to-top       { transition: none; }
 }
+
+/* ── Tabs ── */
+.admin-tabs {
+    display        : flex;
+    gap            : 0;
+    margin-bottom  : 20px;
+    border-bottom  : 2px solid var(--grey-light);
+}
+ 
+.admin-tab {
+    background     : transparent;
+    border         : none;
+    border-bottom  : 2px solid transparent;
+    margin-bottom  : -2px;
+    padding        : 10px 24px;
+    font-family    : 'Jost', sans-serif;
+    font-size      : 0.82rem;
+    font-weight    : 500;
+    letter-spacing : 1.5px;
+    text-transform : uppercase;
+    color          : var(--grey);
+    cursor         : pointer;
+    transition     : color 0.2s ease, border-color 0.2s ease;
+}
+ 
+.admin-tab:hover {
+    color : var(--purple);
+}
+ 
+.admin-tab.active {
+    color        : var(--purple);
+    border-color : var(--purple);
+}
+ 
+/* ── Search bar ── */
+.admin-search-bar {
+    margin-bottom : 20px;
+}
+ 
+.admin-search-bar input {
+    width          : 100%;
+    max-width      : 480px;
+    padding        : 12px 16px;
+    border         : 1px solid var(--grey-light);
+    border-radius  : 2px;
+    font-family    : 'Jost', sans-serif;
+    font-size      : 0.9rem;
+    color          : var(--black);
+    background     : var(--white);
+    outline        : none;
+    transition     : border-color 0.2s ease;
+}
+ 
+.admin-search-bar input:focus {
+    border-color : var(--purple);
+}
+ 
+.admin-search-bar input::placeholder {
+    color : var(--grey);
+}
+ 
+/* ── Dark mode ── */
+body.dark-mode .admin-tabs {
+    border-color : #2E2E3E;
+}
+ 
+body.dark-mode .admin-tab.active {
+    border-color : var(--purple-light);
+    color        : var(--purple-light);
+}
+ 
+body.dark-mode .admin-search-bar input {
+    background   : #2A1A3E;
+    color        : #F0F0F0;
+    border-color : #3E2E5E;
+}
+ 
+body.dark-mode .reschedule-form input,
+body.dark-mode .reschedule-form select {
+    background   : #1A1A2E !important;
+    color        : #F0F0F0 !important;
+    border-color : #3E2E5E !important;
+}
+ 
+/* ── Contact form success state ── */
+.contact-success {
+    text-align  : center;
+    padding     : 30px 20px;
+    animation   : confirm-fade-up 0.5s ease both;
+}
+ 
+.contact-success .success-icon {
+    font-size     : 2.5rem;
+    margin-bottom : 14px;
+    display       : block;
+}
+ 
+.contact-success h3 {
+    font-family   : 'Cormorant Garamond', serif;
+    font-size     : 1.6rem;
+    font-weight   : 300;
+    color         : var(--purple-dark);
+    margin-bottom : 10px;
+}
+ 
+.contact-success p {
+    font-size  : 0.9rem;
+    color      : var(--grey);
+    margin-bottom: 20px;
+}
+ 
+@keyframes confirm-fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+ 
+@media (max-width: 768px) {
+    .admin-tab  { padding: 10px 14px; font-size: 0.75rem; }
+    .admin-tabs { overflow-x: auto; }
+}
+ 

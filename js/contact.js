@@ -1,21 +1,54 @@
+function showContactSuccess() {
+    const formBox = document.querySelector('.contact-form-box');
+    if (!formBox) return;
 
-// ===== SHOW SUCCESS MESSAGE =====
-function showSuccess(message) {
-    const msg = document.createElement('div');
-    msg.classList.add('success-message');
-    msg.textContent = message;
-    document.body.appendChild(msg);
-    setTimeout(() => msg.classList.add('fade-out'), 2000);
-    setTimeout(() => msg.remove(), 2500);
+    formBox.innerHTML = `
+        <div class="contact-success">
+            <span class="success-icon">✨</span>
+            <h3>Message <em style="color:var(--purple);font-style:italic;">Sent!</em></h3>
+            <p>
+                Thank you for reaching out.<br/>
+                We will get back to you shortly via WhatsApp.
+            </p>
+            <button class="btn-outline" onclick="resetContactForm()">Send Another Message</button>
+        </div>
+    `;
 }
 
-// ===== SEND MESSAGE VIA WHATSAPP =====
+function resetContactForm() {
+    const formBox = document.querySelector('.contact-form-box');
+    if (!formBox) return;
+
+    formBox.innerHTML = `
+        <h2>Send a <em>Message</em></h2>
+
+        <div class="form-group">
+            <label for="contact-name">Your Name</label>
+            <input type="text" id="contact-name" placeholder="e.g. Yvonne Waithira"/>
+        </div>
+
+        <div class="form-group">
+            <label for="contact-phone">Phone Number</label>
+            <input type="tel" id="contact-phone" placeholder="e.g. 0712 345 678"/>
+        </div>
+
+        <div class="form-group">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" placeholder="Type your message here..."></textarea>
+        </div>
+
+        <button id="send-message-btn" class="btn-primary full-width">Send Message</button>
+    `;
+
+    // Re-wire the button
+    document.getElementById('send-message-btn').addEventListener('click', sendMessage);
+}
+
 function sendMessage() {
     const name    = document.getElementById('contact-name').value.trim();
     const phone   = document.getElementById('contact-phone').value.trim();
     const message = document.getElementById('contact-message').value.trim();
 
-    // Validate
     if (!name || !phone || !message) {
         alert('Please fill in all fields before sending.');
         return;
@@ -26,37 +59,31 @@ function sendMessage() {
         return;
     }
 
-    // Build WhatsApp pre-filled message to owner
     const ownerPhone = '254790549541';
 
     const waMessage =
-        '💌 *New Message — Sera Glam Studio* 💌' + '\n\n' +
-        '👤 *From:* '    + name    + '\n' +
-        '📞 *Phone:* '   + phone   + '\n\n' +
-        '💬 *Message:*'  + '\n'    + message;
+        '💌 *New Message — Sera Glam Studio* 💌\n\n' +
+        '👤 *From:* '   + name    + '\n' +
+        '📞 *Phone:* '  + phone   + '\n\n' +
+        '💬 *Message:*' + '\n'    + message;
 
-    const waURL = 'https://wa.me/' + ownerPhone +
-                  '?text=' + encodeURIComponent(waMessage);
+    window.open(
+        'https://wa.me/' + ownerPhone + '?text=' + encodeURIComponent(waMessage),
+        '_blank'
+    );
 
-    window.open(waURL, '_blank');
-
-    showSuccess('✨ Message sent! We will get back to you shortly.');
-
-    // Clear the form
-    document.getElementById('contact-name').value    = '';
-    document.getElementById('contact-phone').value   = '';
-    document.getElementById('contact-message').value = '';
+    // Show success state instead of toast
+    showContactSuccess();
 }
 
-// ===== EVENT LISTENERS =====
 document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('send-message-btn');
+    if (btn) btn.addEventListener('click', sendMessage);
 
-    document.getElementById('send-message-btn')
-        .addEventListener('click', sendMessage);
-
-    // Ctrl + Enter inside message textarea also sends
-    document.getElementById('contact-message')
-        .addEventListener('keydown', function (e) {
+    const textarea = document.getElementById('contact-message');
+    if (textarea) {
+        textarea.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' && e.ctrlKey) sendMessage();
         });
+    }
 });
